@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["causal_design_present", "design_families", "intervention_or_instrument", "estimand_evidence", "assumptions_visible", "causal_design_evidence", "primary_exclusion_code", "uncertainty_reason", "rationale"],
+  "properties": {
+    "causal_design_present": {"enum": ["yes", "no", "unclear"]},
+    "design_families": {"type": "array", "uniqueItems": true, "items": {"enum": ["genetic_instrument", "randomized_intervention", "nonrandomized_intervention", "direct_perturbation", "temporal_design", "formal_mediation", "graphical_or_directed_model", "other", "none", "unclear"]}},
+    "intervention_or_instrument": {"type": "string"},
+    "estimand_evidence": {"type": "string"},
+    "assumptions_visible": {"enum": ["yes", "no", "unclear"]},
+    "causal_design_evidence": {"type": "string"},
+    "primary_exclusion_code": {"enum": ["EC5", "none", "unclear"]},
+    "uncertainty_reason": {"type": "string"},
+    "rationale": {"type": "string"}
+  }
+}

@@ -1,0 +1,33 @@
+# Secrets
+.env
+.env.*
+!.env.example
+api_keys.json
+**/api_keys.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Generated review data
+data/raw/*
+data/normalized/*
+data/screening/*
+!data/**/.gitkeep
+!data/README.md
+runs/*/raw/
+runs/*/*.jsonl
+runs/*/*.csv
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

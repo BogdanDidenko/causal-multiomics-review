@@ -1,0 +1,52 @@
+{
+  "version": "0.1.0",
+  "round_a": {
+    "scope_reviewer": {
+      "prompt": "prompts/scope_reviewer.txt",
+      "schema": "schemas/scope_reviewer.schema.json",
+      "exclude_if": [
+        {"field": "paper_type", "in": ["review_editorial", "protocol", "methods_only", "resource"]},
+        {"field": "bio_health_scope", "equals": "no"},
+        {"field": "multiomics_present", "equals": "no"}
+      ],
+      "unclear_if": [
+        {"field": "paper_type", "equals": "unclear"},
+        {"field": "bio_health_scope", "equals": "unclear"},
+        {"field": "multiomics_present", "equals": "unclear"}
+      ]
+    },
+    "causal_design_reviewer": {
+      "prompt": "prompts/causal_design_reviewer.txt",
+      "schema": "schemas/causal_design_reviewer.schema.json",
+      "exclude_if": [
+        {"field": "causal_design_present", "equals": "no"}
+      ],
+      "unclear_if": [
+        {"field": "causal_design_present", "equals": "unclear"}
+      ]
+    }
+  },
+  "adjudication": {
+    "prompt": "prompts/adjudicator.txt",
+    "schema": "schemas/adjudicator.schema.json",
+    "exclude_if": [
+      {"field": "paper_type", "in": ["review_editorial", "protocol", "methods_only", "resource"]},
+      {"field": "bio_health_scope", "equals": "no"},
+      {"field": "multiomics_present", "equals": "no"},
+      {"field": "causal_design_present", "equals": "no"}
+    ],
+    "unclear_if": [
+      {"field": "paper_type", "equals": "unclear"},
+      {"field": "bio_health_scope", "equals": "unclear"},
+      {"field": "multiomics_present", "equals": "unclear"},
+      {"field": "causal_design_present", "equals": "unclear"}
+    ]
+  },
+  "routing": {
+    "round_a_all_include": "seek_full_text",
+    "round_a_otherwise": "adjudicate",
+    "adjudicated_include": "seek_full_text",
+    "adjudicated_exclude": "exclude",
+    "adjudicated_unclear": "manual_review"
+  }
+}

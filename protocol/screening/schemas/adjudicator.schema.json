@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["paper_type", "bio_health_scope", "multiomics_present", "omics_layers", "causal_design_present", "design_families", "primary_exclusion_code", "decisive_evidence", "uncertainty_reason", "rationale"],
+  "properties": {
+    "paper_type": {"enum": ["empirical_primary", "review_editorial", "protocol", "methods_only", "resource", "unclear"]},
+    "bio_health_scope": {"enum": ["yes", "no", "unclear"]},
+    "multiomics_present": {"enum": ["yes", "no", "unclear"]},
+    "omics_layers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "causal_design_present": {"enum": ["yes", "no", "unclear"]},
+    "design_families": {"type": "array", "uniqueItems": true, "items": {"enum": ["genetic_instrument", "randomized_intervention", "nonrandomized_intervention", "direct_perturbation", "temporal_design", "formal_mediation", "graphical_or_directed_model", "other", "none", "unclear"]}},
+    "primary_exclusion_code": {"enum": ["EC1", "EC2", "EC3", "EC4", "EC5", "none", "unclear"]},
+    "decisive_evidence": {"type": "string"},
+    "uncertainty_reason": {"type": "string"},
+    "rationale": {"type": "string"}
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "protocol_version": "0.1.0",
+  "calibration_date": "2026-07-18",
+  "calibration_timestamp_utc": "2026-07-18T11:01:44Z",
+  "date_from": "2018-01-01",
+  "date_to": "2026-07-18",
+  "language": "English",
+  "databases": {
+    "pubmed": {
+      "role": "primary",
+      "query_file": "queries/pubmed.txt",
+      "api_key_env": "PUBMED_API_KEY",
+      "calibration_count": 1705
+    },
+    "scopus": {
+      "role": "primary",
+      "query_file": "queries/scopus.txt",
+      "api_key_env": "SCOPUS_API_KEY",
+      "calibration_count": 1129
+    },
+    "europepmc": {
+      "role": "primary",
+      "query_file": "queries/europepmc.txt",
+      "api_key_env": null,
+      "calibration_count": 1793
+    },
+    "semantic_scholar": {
+      "role": "supplementary_recall",
+      "query_file": "queries/semantic_scholar.txt",
+      "api_key_env": "SEMANTIC_SCHOLAR_API_KEY",
+      "calibration_count": 1907
+    },
+    "springernature": {
+      "role": "supplementary_recall",
+      "query_file": "queries/springernature.txt",
+      "api_key_env": "SPRINGERNATURE_META_API_KEY",
+      "calibration_count": 391
+    },
+    "openalex": {
+      "role": "supplementary_high_precision",
+      "query_file": "queries/openalex.txt",
+      "api_key_env": "OPENALEX_API_KEY",
+      "calibration_count": 298
+    },
+    "google_scholar": {
+      "role": "supplementary_manual",
+      "query_file": "queries/google_scholar.txt",
+      "api_key_env": null,
+      "calibration_count": null
+    }
+  }
+}
