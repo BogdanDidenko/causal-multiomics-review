@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "empirical_primary",
+    "bio_health_scope",
+    "multiomics_status",
+    "integration_mode",
+    "omics_layers",
+    "relevant_causal_design",
+    "date_eligible",
+    "english_language",
+    "full_text_sufficient",
+    "first_failed_criterion",
+    "causal_claim_present",
+    "identification_status",
+    "primary_design_family",
+    "supporting_design_families",
+    "population_or_model",
+    "exposure_or_intervention",
+    "comparator",
+    "outcome",
+    "time_horizon",
+    "estimand",
+    "estimand_complete",
+    "assumptions_assessable",
+    "assumptions",
+    "diagnostics_and_sensitivity",
+    "validations",
+    "validation_strength",
+    "limitations",
+    "evidence_spans",
+    "uncertainty_reason",
+    "concise_rationale"
+  ],
+  "properties": {
+    "report_type": {"enum": ["empirical_primary", "review_editorial", "protocol", "methods_only", "resource", "unclear"]},
+    "empirical_primary": {"enum": ["yes", "no", "unclear"]},
+    "bio_health_scope": {"enum": ["yes", "no", "unclear"]},
+    "multiomics_status": {"enum": ["yes", "no", "unclear"]},
+    "integration_mode": {"enum": ["same_study_joint_integration", "same_study_parallel_measurement", "cross_dataset_integrated", "external_context_only", "single_layer_only", "unclear"]},
+    "omics_layers": {"type": "array", "items": {"$ref": "#/$defs/full_text_omics_layer"}},
+    "relevant_causal_design": {"enum": ["yes", "no", "unclear"]},
+    "date_eligible": {"enum": ["yes", "no", "unclear"]},
+    "english_language": {"enum": ["yes", "no", "unclear"]},
+    "full_text_sufficient": {"enum": ["yes", "no", "unclear"]},
+    "first_failed_criterion": {"enum": ["IC1", "IC2", "IC3", "IC4", "IC5", "none", "unclear"]},
+    "causal_claim_present": {"enum": ["yes", "no", "unclear"]},
+    "identification_status": {"enum": ["identified", "hypothesis_only", "association_only", "not_applicable", "unclear"]},
+    "primary_design_family": {"$ref": "#/$defs/design_family_or_none"},
+    "supporting_design_families": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/design_family"}},
+    "population_or_model": {"type": "string"},
+    "exposure_or_intervention": {"type": "string"},
+    "comparator": {"type": "string"},
+    "outcome": {"type": "string"},
+    "time_horizon": {"type": "string"},
+    "estimand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "effect_measure_or_contrast"],
+      "properties": {
+        "statement": {"type": "string"},
+        "effect_measure_or_contrast": {"type": "string"}
+      }
+    },
+    "estimand_complete": {"enum": ["yes", "no", "unclear"]},
+    "assumptions_assessable": {"enum": ["yes", "no", "unclear"]},
+    "assumptions": {"type": "array", "items": {"$ref": "#/$defs/assumption"}},
+    "diagnostics_and_sensitivity": {"type": "array", "items": {"$ref": "#/$defs/diagnostic"}},
+    "validations": {"type": "array", "items": {"$ref": "#/$defs/validation"}},
+    "validation_strength": {"enum": ["independent_same_link", "supporting_only", "none", "unclear"]},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "evidence_spans": {"type": "array", "items": {"$ref": "#/$defs/section_evidence"}},
+    "uncertainty_reason": {"type": "string"},
+    "concise_rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "design_family": {"enum": ["genetic_instrument", "randomized_intervention", "nonrandomized_intervention", "direct_perturbation", "temporal_design", "formal_mediation", "graphical_or_directed_model", "other"]},
+    "design_family_or_none": {"enum": ["genetic_instrument", "randomized_intervention", "nonrandomized_intervention", "direct_perturbation", "temporal_design", "formal_mediation", "graphical_or_directed_model", "other", "none", "unclear"]},
+    "full_text_omics_layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "assay_or_data_source", "cohort_or_system", "origin", "analytic_role", "section_ids"],
+      "properties": {
+        "layer": {"enum": ["genomics", "epigenomics", "transcriptomics", "proteomics", "metabolomics", "lipidomics", "microbiomics", "other_molecular_omics"]},
+        "assay_or_data_source": {"type": "string"},
+        "cohort_or_system": {"type": "string"},
+        "origin": {"enum": ["measured_in_report", "external_dataset_analyzed", "context_only", "unclear"]},
+        "analytic_role": {"type": "string"},
+        "section_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "assumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "status", "assessment", "section_ids"],
+      "properties": {
+        "name": {"type": "string"},
+        "status": {"enum": ["addressed", "not_reported", "violated", "unclear"]},
+        "assessment": {"type": "string"},
+        "section_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "result_or_role", "section_ids"],
+      "properties": {
+        "name": {"type": "string"},
+        "result_or_role": {"type": "string"},
+        "section_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "independence", "alignment", "what_it_validates", "section_ids"],
+      "properties": {
+        "type": {"enum": ["replication", "colocalization", "orthogonal_perturbation", "independent_cohort", "negative_control", "triangulation", "other"]},
+        "independence": {"enum": ["independent", "partially_independent", "not_independent", "unclear"]},
+        "alignment": {"enum": ["same_causal_link", "related_mechanism_only", "general_plausibility", "unclear"]},
+        "what_it_validates": {"type": "string"},
+        "section_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "section_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criterion", "section_id", "quote"],
+      "properties": {
+        "criterion": {"type": "string"},
+        "section_id": {"type": "string"},
+        "quote": {"type": "string"}
+      }
+    }
+  }
+}

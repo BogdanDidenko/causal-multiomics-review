@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "bio_health_scope",
+    "multiomics_status",
+    "integration_mode",
+    "omics_layers",
+    "causal_claim_present",
+    "identification_status",
+    "design_families",
+    "design_role",
+    "exposure_or_intervention",
+    "comparator",
+    "outcome",
+    "estimand_or_contrast",
+    "resolution_status",
+    "evidence_spans",
+    "boundary_cases",
+    "uncertainty_reason",
+    "concise_rationale"
+  ],
+  "properties": {
+    "report_type": {
+      "enum": ["empirical_primary", "review_editorial", "protocol", "methods_only", "resource", "unclear"]
+    },
+    "bio_health_scope": {"enum": ["yes", "no", "unclear"]},
+    "multiomics_status": {"enum": ["yes", "no", "unclear"]},
+    "integration_mode": {
+      "enum": [
+        "same_study_joint_integration",
+        "same_study_parallel_measurement",
+        "cross_dataset_integrated",
+        "external_context_only",
+        "single_layer_only",
+        "unclear"
+      ]
+    },
+    "omics_layers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/omics_layer"}
+    },
+    "causal_claim_present": {"enum": ["yes", "no", "unclear"]},
+    "identification_status": {
+      "enum": ["identified", "hypothesis_only", "association_only", "no_relevant_design", "unclear"]
+    },
+    "design_families": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/design_family"}
+    },
+    "design_role": {
+      "enum": ["primary_identification", "supporting_identification", "validation_only", "mentioned_only", "unclear"]
+    },
+    "exposure_or_intervention": {"type": "string"},
+    "comparator": {"type": "string"},
+    "outcome": {"type": "string"},
+    "estimand_or_contrast": {"type": "string"},
+    "resolution_status": {
+      "enum": ["resolved", "insufficient_title_abstract", "conflict_unresolved"]
+    },
+    "evidence_spans": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/title_abstract_evidence"}
+    },
+    "boundary_cases": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string"}
+    },
+    "uncertainty_reason": {"type": "string"},
+    "concise_rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "omics_layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "raw_term", "use_status", "analytic_role"],
+      "properties": {
+        "layer": {
+          "enum": ["genomics", "epigenomics", "transcriptomics", "proteomics", "metabolomics", "lipidomics", "microbiomics", "other_molecular_omics"]
+        },
+        "raw_term": {"type": "string", "minLength": 1},
+        "use_status": {"enum": ["measured_in_study", "external_dataset_analyzed", "context_only", "unclear"]},
+        "analytic_role": {"type": "string"}
+      }
+    },
+    "design_family": {
+      "enum": ["genetic_instrument", "randomized_intervention", "nonrandomized_intervention", "direct_perturbation", "temporal_design", "formal_mediation", "graphical_or_directed_model", "other"]
+    },
+    "title_abstract_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criterion", "source", "quote"],
+      "properties": {
+        "criterion": {"type": "string"},
+        "source": {"enum": ["title", "abstract", "metadata"]},
+        "quote": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

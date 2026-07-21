@@ -25,7 +25,9 @@ def gate_answer(answer: dict[str, Any], role_config: dict[str, Any]) -> GateDeci
 def route_round_a(
     answers: dict[str, dict[str, Any]], config: dict[str, Any]
 ) -> tuple[str, dict[str, GateDecision]]:
-    role_configs = config["round_a"]
+    role_configs = config.get("round_a", config.get("roles"))
+    if not role_configs:
+        raise ValueError("Stage config must define round_a or roles")
     decisions = {
         role: gate_answer(answers[role], role_config)
         for role, role_config in role_configs.items()

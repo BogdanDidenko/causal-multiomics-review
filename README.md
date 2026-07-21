@@ -74,13 +74,27 @@ python scripts/deduplicate.py input.csv data/normalized/canonical.csv \
   --log data/normalized/deduplication_log.csv
 ```
 
-Run criterion-level screening with an OpenAI-compatible endpoint:
+Run the active title/abstract prompt suite with an OpenAI-compatible endpoint:
 
 ```bash
 export SCREENING_API_KEY=...
 python scripts/run_screening.py data/normalized/canonical.csv runs/pilot-001 \
-  --model YOUR_MODEL --base-url https://api.example.com/v1
+  --stage title_abstract --model YOUR_MODEL \
+  --base-url https://api.example.com/v1
 ```
+
+Full-text screening accepts JSONL records with a `sections` array containing
+stable `section_id`, `heading`, and `text` fields:
+
+```bash
+python scripts/run_screening.py full_text_records.jsonl runs/fulltext-pilot-001 \
+  --stage full_text --model YOUR_MODEL \
+  --base-url https://api.example.com/v1 --resume
+```
+
+The active suite is declared in
+`protocol/screening/configs/prompt_suite_v0.2.0.json`; exact prompt/schema
+hashes are in `protocol/screening/prompt_manifest.json`.
 
 API keys are read only from environment variables. The local helper
 `academic-api-env` can load the academic database credentials already stored
@@ -95,10 +109,11 @@ python scripts/probe_searches.py runs/search-calibration
 
 ## Current Status
 
-The protocol, calibrated query pack, first task-specific screening prompts,
-config-driven gates, audit utilities, tests, and CI are initialized. Search
-counts from 2026-07-18 are calibration evidence, not final PRISMA counts; a
-new frozen retrieval run must be created before formal screening begins.
+The protocol, calibrated query pack, seven-prompt suite, config-driven
+gates, benchmark candidate sets, audit utilities, tests, and CI are
+initialized. Prompts remain `draft_pending_benchmark` until expert annotation
+and the declared acceptance gates are complete. Search counts from 2026-07-18
+are calibration evidence, not final PRISMA counts.
 
 ## License
 

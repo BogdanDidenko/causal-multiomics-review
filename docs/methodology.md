@@ -56,10 +56,15 @@ deployment benchmark.
 
 ## Full-Text Assessment
 
-For every retained report, reviewers record measured/integrated omics layers,
-population/model, exposure or intervention, outcome, causal estimand,
-identification assumptions, sensitivity analyses, replication/validation, and
-study-report linkage. The evidence rubric is:
+Full text uses a section-aware two-pass workflow. A selector first identifies
+Methods, Results, diagnostics, validation, and limitations sections by stable
+section ID. Independent eligibility and causal-evidence reviewers then record
+measured/integrated omics layers, population/model, exposure or intervention,
+outcome, causal estimand, identification assumptions, sensitivity analyses,
+replication/validation, and study-report linkage. A full-text adjudicator
+resolves conflicts; Python derives the evidence level.
+
+The evidence rubric is:
 
 | Level | Interpretation |
 |---|---|
@@ -72,3 +77,18 @@ study-report linkage. The evidence rubric is:
 An RCT identifies the randomized treatment contrast, not automatically a
 molecular mediator. A DAG, pathway, or causal-discovery output is not causal
 evidence without an identification argument and relevant assumptions.
+
+Levels 2-4 enter the main scoping synthesis. Levels 0-1 remain in the audit as
+context or exclusions. Colocalization is supporting validation rather than a
+standalone identification design, and model-system perturbation is not assumed
+to validate a population-level human effect.
+
+## Model Dependence
+
+Prompt regression uses three DeepSeek repeats and two GPT-OSS repeats. Full
+deployment uses two runs each from DeepSeek V4 Flash, GPT-OSS 120B, and Nemotron
+3 Super 120B. Only six-run unanimous exclusions with the same controlled code
+are automatically excluded; any uncertainty or disagreement proceeds to full
+text. This policy follows the observed model dependence in the reference
+review, where cross-model disagreement was materially larger than simple
+within-run label noise.

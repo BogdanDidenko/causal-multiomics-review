@@ -1,8 +1,14 @@
-# Screening Contract
+# Screening Contracts
 
-The prompt files are canonical runtime artifacts. Schemas define the only
-accepted model responses. `gate_config.json` maps criterion values to
-deterministic decisions.
+The unversioned prompt files and `gate_config.json` are the immutable legacy
+`v0.1.0` title/abstract contract. They remain available for reproduction.
+
+The active suite is `configs/prompt_suite_v0.2.0.json`:
+
+- title/abstract prompts are version `0.2.0`;
+- full-text prompts are version `0.1.0`;
+- `prompt_manifest.json` records exact prompt, schema, and config hashes;
+- schemas use JSON Schema Draft 2020-12 and permit nested evidence objects.
 
 Round A runs `scope_reviewer` and `causal_design_reviewer` independently. A
 record advances directly only when both gates return `include`. Any `exclude`,
@@ -14,6 +20,16 @@ or `manual_review`.
 Prompts use `{{RECORD_ID}}`, `{{TITLE}}`, `{{ABSTRACT}}`, `{{YEAR}}`, and
 `{{SOURCE}}`. The runner stores prompt/schema hashes and raw responses.
 
-Before screening the full corpus, freeze a human-adjudicated benchmark and
-declare acceptance thresholds. The initial prompts are version `0.1.0`, not a
-validated production classifier.
+At full text, a section selector chooses stable section IDs before independent
+eligibility and causal-evidence reviewers run. Python validates every cited
+section ID, adjudicates conflicts, derives evidence Levels 0-4, and writes the
+existing ledger-compatible fields.
+
+Invalid JSON is retried once. A second failure, missing abstract, insufficient
+full text, invalid section citation, or decisive uncertainty becomes
+`manual_review`; records are never silently dropped. `--resume` skips completed
+record IDs and appends new checkpointed outputs.
+
+The annotation-pending benchmark candidates and acceptance gates are under
+`benchmarks/`. The active prompts are not approved production classifiers until
+the expert benchmark passes and the manifest status is updated.

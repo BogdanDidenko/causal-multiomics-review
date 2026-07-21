@@ -1,0 +1,14 @@
+{
+  "counts": {
+    "full_text_benchmark": 60,
+    "high_signal_development": 25,
+    "section_selector_gold": 20,
+    "title_abstract_regression": 116
+  },
+  "created_at": "2026-07-21T01:00:31.312701+00:00",
+  "ground_truth_policy": "Existing decisions are sampling hints only; expert fields require fresh annotation.",
+  "input_file": "screening_ledger.csv",
+  "input_sha256": "6a7acae5a9e50149a77c0ad18810761bd5ed21c3af90e0df16f4cedde66475d9",
+  "seed": "causal-multiomics-benchmark-v0.1.0",
+  "status": "annotation_pending"
+}

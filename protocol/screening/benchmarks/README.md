@@ -1,0 +1,62 @@
+# Prompt Benchmark Protocol
+
+The files under `candidates/` are deterministic, annotation-pending samples
+from the 1,620-record causal multi-omics ledger. Prior decisions are retained
+only as sampling provenance. They are not ground truth.
+
+## Candidate Sets
+
+- `high_signal_development_25.csv`: prompt iteration only; never report final
+  performance on this set.
+- `title_abstract_regression_116.csv`: 42 candidate Levels 2-4, 42 candidate
+  exclusions, and 32 boundary/unclear records.
+- `full_text_benchmark_60.csv`: all available prior Levels 0-2 plus balanced
+  samples of Levels 3-4 and rare design families.
+- `section_selector_gold_20.csv`: subset for expert section-ID annotation.
+
+## Expert Annotation
+
+One domain expert re-annotates every record from the evidence supplied at the
+relevant stage. Existing decision columns must remain hidden during annotation.
+The expert records criterion values, evidence, uncertainty, exclusion code,
+design family, and evidence level using the operative codebook. Canonical
+positive controls are marked `yes` in `expert_canonical_positive`; this field
+is part of the expert annotation and is never inferred from prior decisions.
+
+After at least seven days, the expert blindly re-annotates a deterministic 20%
+subset. Report exact agreement and weighted agreement before reconciling the
+two passes. Reconciled expert fields become benchmark version `v1.0.0`.
+
+## Acceptance Gates
+
+Title/abstract:
+
+- canonical positive retention: 100%;
+- sensitivity for expert Levels 2-4: at least 0.98;
+- direct-exclusion precision: at least 0.95;
+- valid structured response after one retry: 100%.
+
+Full text:
+
+- eligibility sensitivity: at least 0.95;
+- design-family macro-F1: at least 0.85;
+- exact evidence-level agreement: at least 0.80;
+- quadratic weighted kappa: at least 0.80;
+- agreement within one evidence level: at least 0.95;
+- unknown or unsupported section citations: zero.
+
+The prompt manifest remains `draft_pending_benchmark` until these gates pass.
+Prompt changes after looking at regression outcomes require a new prompt
+version and a fresh held-out benchmark.
+
+Run `scripts/evaluate_prompt_benchmark.py` after annotation and screening. Its
+`acceptance` object reports each threshold and an overall `pass`, `fail`, or
+`not_evaluable` status; blank expert fields intentionally remain not evaluable.
+
+## Runtime Matrix
+
+Development uses the 25-record set. Regression runs DeepSeek V4 Flash three
+times and GPT-OSS 120B twice. Full-corpus deployment runs DeepSeek V4 Flash,
+GPT-OSS 120B, and Nemotron 3 Super 120B twice each. Only a six-run unanimous
+`EXCLUDE` with one exclusion code may be automatically excluded; every other
+record proceeds to full text.

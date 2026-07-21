@@ -1,0 +1,47 @@
+{
+  "version": "0.1.0",
+  "cases": [
+    {
+      "case_id": "mr_qtl_cross_dataset_multiomics",
+      "stage": "title_abstract",
+      "expected_boundary": "cross_dataset_multiomics",
+      "rule": "GWAS plus an analyzed eQTL, mQTL, pQTL, or other molecular layer may satisfy multi-omics across cohorts."
+    },
+    {
+      "case_id": "colocalization_only",
+      "stage": "both",
+      "expected_identification_status": "association_only_or_hypothesis_only",
+      "rule": "Colocalization supports a shared locus but is not a standalone exposure-outcome identification design."
+    },
+    {
+      "case_id": "rct_without_mediation_identification",
+      "stage": "both",
+      "expected_boundary": "rct_without_mediation_identification",
+      "rule": "Randomization identifies treatment assignment effects, not molecular direct or indirect effects without mediation assumptions."
+    },
+    {
+      "case_id": "uncontrolled_mediation",
+      "stage": "full_text",
+      "expected_identification_status": "hypothesis_only",
+      "rule": "Pre/post or observational mediation without temporal ordering and mediator-outcome confounding control is Level 2."
+    },
+    {
+      "case_id": "network_only_causality",
+      "stage": "both",
+      "expected_identification_status": "hypothesis_only",
+      "rule": "A directed network edge without an intervention, temporal anchor, estimand, or identification argument is not an identified effect."
+    },
+    {
+      "case_id": "single_layer_multiple_assays",
+      "stage": "both",
+      "expected_multiomics_status": "no",
+      "rule": "Multiple assays, cohorts, or tissues from one molecular layer do not automatically establish multi-omics."
+    },
+    {
+      "case_id": "thin_abstract",
+      "stage": "title_abstract",
+      "expected_route": "manual_review_or_seek_full_text",
+      "rule": "Missing decisive detail is unclear, not negative evidence."
+    }
+  ]
+}
