@@ -648,6 +648,14 @@ def _provider_runtime(provider: OpenAICompatibleProvider) -> dict[str, Any]:
         "response_format": getattr(provider, "response_format", None),
         "reasoning_effort": getattr(provider, "reasoning_effort", None),
         "text_verbosity": getattr(provider, "text_verbosity", None),
+        "context_window": getattr(provider, "context_window", None),
+        "codex_bin": getattr(provider, "codex_bin", None),
+        "codex_timeout_seconds": getattr(provider, "timeout", None),
+        "sandbox": getattr(provider, "sandbox", None),
+        "approval_policy": getattr(provider, "approval_policy", None),
+        "ephemeral": getattr(provider, "ephemeral", None),
+        "ignore_user_config": getattr(provider, "ignore_user_config", None),
+        "ignore_rules": getattr(provider, "ignore_rules", None),
     }
 
 

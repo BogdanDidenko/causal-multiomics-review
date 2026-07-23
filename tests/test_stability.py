@@ -59,7 +59,17 @@ def test_stability_cli_requires_matching_luna_manifests(tmp_path) -> None:
             json.dumps(
                 {
                     "model": "gpt-5.6-luna",
-                    "runtime": {"api_protocol": "openai_responses"},
+                    "runtime": {
+                        "api_protocol": "codex_cli",
+                        "reasoning_effort": "medium",
+                        "context_window": 32768,
+                        "response_format": "json_schema",
+                        "sandbox": "read-only",
+                        "approval_policy": "never",
+                        "ephemeral": True,
+                        "ignore_user_config": True,
+                        "ignore_rules": True,
+                    },
                 }
             ),
             encoding="utf-8",
@@ -83,3 +93,49 @@ def test_stability_cli_requires_matching_luna_manifests(tmp_path) -> None:
     summary = json.loads((output_dir / "stability_summary.json").read_text())
     assert completed.stdout.strip() == "pass"
     assert summary["acceptance"]["overall"] == "pass"
+
+
+def test_stability_cli_rejects_reasoning_effort_drift(tmp_path) -> None:
+    run_args: list[str] = []
+    for index in range(1, 6):
+        run_dir = tmp_path / f"replicate-{index:02d}"
+        run_dir.mkdir()
+        result_path = run_dir / "screening_results.jsonl"
+        result_path.write_text(json.dumps(title_result()) + "\n", encoding="utf-8")
+        reasoning_effort = "high" if index == 5 else "medium"
+        (run_dir / "manifest.json").write_text(
+            json.dumps(
+                {
+                    "model": "gpt-5.6-luna",
+                    "runtime": {
+                        "api_protocol": "codex_cli",
+                        "reasoning_effort": reasoning_effort,
+                        "context_window": 32768,
+                        "response_format": "json_schema",
+                        "sandbox": "read-only",
+                        "approval_policy": "never",
+                        "ephemeral": True,
+                        "ignore_user_config": True,
+                        "ignore_rules": True,
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+        run_args.extend(("--run", f"replicate-{index:02d}={result_path}"))
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "assess_screening_stability.py"),
+            "--stage",
+            "title_abstract",
+            "--output-dir",
+            str(tmp_path / "assessment"),
+            *run_args,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode != 0
+    assert "reasoning_effort='high'" in completed.stderr

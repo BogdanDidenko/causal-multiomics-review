@@ -74,10 +74,10 @@ python scripts/deduplicate.py input.csv data/normalized/canonical.csv \
   --log data/normalized/deduplication_log.csv
 ```
 
-Run the active title/abstract prompt suite with an OpenAI-compatible endpoint:
+Run the active title/abstract prompt suite through the locally authenticated Codex
+CLI:
 
 ```bash
-export OPENAI_API_KEY=...
 python scripts/run_screening.py data/normalized/canonical.csv runs/pilot-001 \
   --stage title_abstract
 ```
@@ -91,7 +91,7 @@ python scripts/run_screening.py full_text_records.jsonl runs/fulltext-pilot-001 
 ```
 
 The active suite is declared in
-`protocol/screening/configs/prompt_suite_v0.3.0.json`; exact prompt/schema
+`protocol/screening/configs/prompt_suite_v0.4.0.json`; exact prompt/schema
 hashes are in `protocol/screening/prompt_manifest.json`.
 
 The active suite runs every agent with `gpt-5.6-luna` at medium reasoning
@@ -102,9 +102,10 @@ python scripts/run_stability.py data/normalized/canonical.csv runs/stability-tit
   --stage title_abstract
 ```
 
-API keys are read only from environment variables. The local helper
-`academic-api-env` can load the academic database credentials already stored
-in macOS Keychain; no key belongs in this repository.
+The screening runner invokes `codex exec` directly and reuses its local
+authentication; it does not call the Responses API or require an API key. The
+local helper `academic-api-env` can load academic database credentials already
+stored in macOS Keychain; no key belongs in this repository.
 
 Probe current database counts without committing credentials:
 

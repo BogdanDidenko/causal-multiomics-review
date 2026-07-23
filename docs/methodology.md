@@ -86,10 +86,12 @@ to validate a population-level human effect.
 ## Stability Gate
 
 All seven agents use GPT 5.6 Luna Medium (`gpt-5.6-luna` with medium reasoning
-effort) through the Responses API. The same frozen input is run five times with
-the same model and configuration. The gate requires 100% schema success, exact
-agreement for final decision and every decisive criterion, exact full-text
-evidence-level agreement, and no manual-review result caused by the run.
+effort) through isolated `codex exec` calls. Each call is ephemeral, ignores
+local Codex configuration and project rules, and runs in a read-only sandbox.
+The same frozen input is run five times with the same model and configuration.
+The gate requires 100% schema success, exact agreement for final decision and
+every decisive criterion, exact full-text evidence-level agreement, and no
+manual-review result caused by the run.
 
 The evaluator compares a canonical criterion vector, not prose explanations or
 the exact wording of a quoted span. It therefore distinguishes harmless audit

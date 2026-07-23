@@ -44,7 +44,10 @@ def main() -> None:
         raise SystemExit(f"Stability policy requires exactly {policy['repeats']} runs")
 
     for path in run_paths.values():
-        _validate_run_manifest(path, suite["provider"]["model"])
+        _validate_run_manifest(
+            path,
+            suite,
+        )
     run_results = {label: read_jsonl(path) for label, path in run_paths.items()}
     rows, summary = assess_stability(run_results, args.stage, policy["acceptance"])
     summary["model"] = suite["provider"]["model"]
@@ -61,22 +64,39 @@ def main() -> None:
     print(summary["acceptance"]["overall"])
 
 
-def _validate_run_manifest(result_path: Path, expected_model: str) -> None:
+def _validate_run_manifest(
+    result_path: Path,
+    suite: dict[str, Any],
+) -> None:
     manifest_path = result_path.parent / "manifest.json"
     if not manifest_path.is_file():
         raise SystemExit(f"Missing run manifest beside {result_path}")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    expected_model = suite["provider"]["model"]
     if manifest.get("model") != expected_model:
         raise SystemExit(
             f"Run manifest {manifest_path} used {manifest.get('model')!r}, "
             f"expected {expected_model!r}"
         )
-    protocol = manifest.get("runtime", {}).get("api_protocol")
-    if protocol != "openai_responses":
-        raise SystemExit(
-            f"Run manifest {manifest_path} used protocol {protocol!r}, "
-            "expected 'openai_responses'"
-        )
+    runtime = manifest.get("runtime", {})
+    expected_runtime = {
+        "api_protocol": suite["runtime"]["provider_protocol"],
+        "reasoning_effort": suite["runtime"]["reasoning_effort"],
+        "context_window": suite["runtime"]["context_window"],
+        "response_format": suite["runtime"]["response_format"],
+        "sandbox": suite["provider"]["sandbox"],
+        "approval_policy": suite["provider"]["approval_policy"],
+        "ephemeral": suite["provider"]["ephemeral"],
+        "ignore_user_config": suite["provider"]["ignore_user_config"],
+        "ignore_rules": suite["provider"]["ignore_rules"],
+    }
+    for field, expected in expected_runtime.items():
+        actual = runtime.get(field)
+        if actual != expected:
+            raise SystemExit(
+                f"Run manifest {manifest_path} used {field}={actual!r}, "
+                f"expected {expected!r}"
+            )
 
 
 if __name__ == "__main__":

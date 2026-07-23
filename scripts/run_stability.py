@@ -19,6 +19,8 @@ def main() -> None:
     parser.add_argument("--suite-config", type=Path, default=DEFAULT_SUITE_CONFIG)
     parser.add_argument("--api-key-env")
     parser.add_argument("--base-url")
+    parser.add_argument("--codex-bin")
+    parser.add_argument("--codex-timeout", type=int)
     parser.add_argument("--model")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--resume", action="store_true")
@@ -46,6 +48,8 @@ def main() -> None:
         ]
         _append_option(command, "--api-key-env", args.api_key_env)
         _append_option(command, "--base-url", args.base_url)
+        _append_option(command, "--codex-bin", args.codex_bin)
+        _append_option(command, "--codex-timeout", args.codex_timeout)
         _append_option(command, "--model", args.model)
         _append_option(command, "--limit", args.limit)
         if args.resume:

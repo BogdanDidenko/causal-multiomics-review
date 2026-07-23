@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import json
 import ssl
+import subprocess
+import tempfile
 import urllib.error
 import urllib.request
+from pathlib import Path
 from typing import Any
 
 import certifi
@@ -160,12 +163,154 @@ class OpenAICompatibleProvider:
         return payload
 
 
+class CodexCliProvider:
+    """Run a schema-constrained reviewer through an isolated Codex CLI process."""
+
+    api_protocol = "codex_cli"
+    url = "codex://local/exec"
+    temperature = None
+    top_p = None
+    seed = None
+    n = 1
+    text_verbosity = None
+
+    def __init__(
+        self,
+        model: str,
+        *,
+        codex_bin: str = "codex",
+        timeout: int = 900,
+        reasoning_effort: str = "medium",
+        context_window: int = 32768,
+        sandbox: str = "read-only",
+        approval_policy: str = "never",
+        ephemeral: bool = True,
+        ignore_user_config: bool = True,
+        ignore_rules: bool = True,
+        max_tokens: int | None = None,
+    ) -> None:
+        self.model = model
+        self.codex_bin = codex_bin
+        self.timeout = timeout
+        self.reasoning_effort = reasoning_effort
+        self.context_window = context_window
+        self.sandbox = sandbox
+        self.approval_policy = approval_policy
+        self.ephemeral = ephemeral
+        self.ignore_user_config = ignore_user_config
+        self.ignore_rules = ignore_rules
+        self.max_tokens = max_tokens
+        self.response_format = "json_schema"
+
+    def complete_json(
+        self,
+        prompt: str,
+        schema: dict[str, Any] | None = None,
+        schema_name: str = "screening_response",
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
+        if schema is None:
+            raise ValueError("Codex CLI screening requires a JSON Schema")
+
+        with tempfile.TemporaryDirectory(prefix="causal-multiomics-codex-") as directory:
+            workdir = Path(directory)
+            schema_path = workdir / f"{schema_name}.schema.json"
+            output_path = workdir / "last_message.json"
+            schema_path.write_text(
+                json.dumps(schema, ensure_ascii=False), encoding="utf-8"
+            )
+            command = [
+                self.codex_bin,
+                "exec",
+                "-",
+                "--model",
+                self.model,
+                "--config",
+                f'model_reasoning_effort="{self.reasoning_effort}"',
+                "--config",
+                f"model_context_window={self.context_window}",
+                "--sandbox",
+                self.sandbox,
+                "--ask-for-approval",
+                self.approval_policy,
+                "--skip-git-repo-check",
+                "--output-schema",
+                str(schema_path),
+                "--output-last-message",
+                str(output_path),
+            ]
+            if self.ephemeral:
+                command.append("--ephemeral")
+            if self.ignore_user_config:
+                command.append("--ignore-user-config")
+            if self.ignore_rules:
+                command.append("--ignore-rules")
+            try:
+                completed = subprocess.run(
+                    command,
+                    input=prompt,
+                    text=True,
+                    capture_output=True,
+                    cwd=workdir,
+                    timeout=self.timeout,
+                    check=False,
+                )
+            except FileNotFoundError as error:
+                raise ProviderError(
+                    f"Codex CLI executable not found: {self.codex_bin}"
+                ) from error
+            except subprocess.TimeoutExpired as error:
+                raise ProviderError(
+                    f"Codex CLI timed out after {self.timeout} seconds",
+                    raw_response={
+                        "transport": self.api_protocol,
+                        "stdout": _as_text(error.stdout),
+                        "stderr": _as_text(error.stderr),
+                    },
+                ) from error
+            except OSError as error:
+                raise ProviderError(f"Codex CLI execution failed: {error}") from error
+
+            raw = {
+                "transport": self.api_protocol,
+                "exit_code": completed.returncode,
+                "stdout": completed.stdout,
+                "stderr": completed.stderr,
+            }
+            if completed.returncode:
+                raise ProviderError(
+                    f"Codex CLI exited with {completed.returncode}: "
+                    f"{completed.stderr.strip()[:1000]}",
+                    raw_response=raw,
+                )
+            try:
+                content = output_path.read_text(encoding="utf-8")
+            except OSError as error:
+                raise ProviderError(
+                    "Codex CLI completed without a final message", raw_response=raw
+                ) from error
+            raw["last_message"] = content
+            try:
+                parsed = json.loads(_strip_code_fence(content))
+            except json.JSONDecodeError as error:
+                raise ProviderError(
+                    f"Invalid Codex CLI JSON response: {error}", raw_response=raw
+                ) from error
+            if not isinstance(parsed, dict):
+                raise ProviderError("Model response is not a JSON object", raw_response=raw)
+            return parsed, raw
+
 def _strip_code_fence(value: str) -> str:
     text = value.strip()
     if text.startswith("```"):
         text = text.split("\n", 1)[1]
         text = text.rsplit("```", 1)[0]
     return text.strip()
+
+
+def _as_text(value: str | bytes | None) -> str | None:
+    if isinstance(value, bytes):
+        return value.decode(errors="replace")
+    return value
 
 
 def _responses_output_text(raw: dict[str, Any]) -> str:

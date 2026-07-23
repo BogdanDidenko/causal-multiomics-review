@@ -59,22 +59,27 @@ def main() -> None:
                 errors.append(f"{role}: missing prompt placeholders {sorted(missing)}")
 
     screening_root = PROTOCOL / "screening"
-    suite_path = screening_root / "configs" / "prompt_suite_v0.3.0.json"
+    suite_path = screening_root / "configs" / "prompt_suite_v0.4.0.json"
     suite = load_object(suite_path)
     expected_runtime = {
-        "provider_protocol": "openai_responses",
+        "provider_protocol": "codex_cli",
         "reasoning_effort": "medium",
-        "text_verbosity": "low",
         "context_window": 32768,
+        "codex_timeout_seconds": 900,
         "max_retries": 1,
     }
     for field, expected in expected_runtime.items():
         if suite.get("runtime", {}).get(field) != expected:
             errors.append(f"suite runtime {field} must be {expected}")
     expected_provider = {
-        "protocol": "openai_responses",
+        "protocol": "codex_cli",
         "model": "gpt-5.6-luna",
         "display_name": "GPT 5.6 Luna Medium",
+        "sandbox": "read-only",
+        "approval_policy": "never",
+        "ephemeral": True,
+        "ignore_user_config": True,
+        "ignore_rules": True,
     }
     for field, expected in expected_provider.items():
         if suite.get("provider", {}).get(field) != expected:
