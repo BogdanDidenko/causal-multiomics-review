@@ -59,37 +59,51 @@ def main() -> None:
                 errors.append(f"{role}: missing prompt placeholders {sorted(missing)}")
 
     screening_root = PROTOCOL / "screening"
-    suite_path = screening_root / "configs" / "prompt_suite_v0.2.0.json"
+    suite_path = screening_root / "configs" / "prompt_suite_v0.3.0.json"
     suite = load_object(suite_path)
     expected_runtime = {
-        "temperature": 0.7,
-        "top_p": 1.0,
-        "seed": 0,
-        "n": 1,
+        "provider_protocol": "openai_responses",
+        "reasoning_effort": "medium",
+        "text_verbosity": "low",
         "context_window": 32768,
         "max_retries": 1,
     }
     for field, expected in expected_runtime.items():
         if suite.get("runtime", {}).get(field) != expected:
             errors.append(f"suite runtime {field} must be {expected}")
-    expected_runs = {
-        "prompt_regression": {
-            "deepseek-v4-flash": 3,
-            "gpt-oss-120b": 2,
-        },
-        "full_deployment": {
-            "deepseek-v4-flash": 2,
-            "gpt-oss-120b": 2,
-            "nemotron3-super-120b-a12b-fp8": 2,
-        },
+    expected_provider = {
+        "protocol": "openai_responses",
+        "model": "gpt-5.6-luna",
+        "display_name": "GPT 5.6 Luna Medium",
     }
-    for phase, expected in expected_runs.items():
-        actual = {
-            item.get("model"): item.get("repeats")
-            for item in suite.get("run_matrix", {}).get(phase, [])
-        }
-        if actual != expected:
-            errors.append(f"suite run_matrix.{phase} does not match {expected}")
+    for field, expected in expected_provider.items():
+        if suite.get("provider", {}).get(field) != expected:
+            errors.append(f"suite provider {field} must be {expected}")
+    stability_policy = suite.get("stability_policy", {})
+    if stability_policy.get("model") != "gpt-5.6-luna":
+        errors.append("stability policy must use gpt-5.6-luna")
+    if stability_policy.get("repeats") != 5:
+        errors.append("stability policy must require five runs")
+    expected_agents = [
+        "scope_reviewer",
+        "causal_design_reviewer",
+        "title_abstract_adjudicator",
+        "section_selector",
+        "fulltext_eligibility_reviewer",
+        "causal_evidence_reviewer",
+        "fulltext_adjudicator",
+    ]
+    if stability_policy.get("agent_stages") != expected_agents:
+        errors.append("stability policy must cover all seven agent stages")
+    required_acceptance = {
+        "schema_success_rate": 1.0,
+        "final_decision_exact_agreement": 1.0,
+        "decisive_criteria_exact_agreement": 1.0,
+        "causal_evidence_level_exact_agreement": 1.0,
+        "manual_review_rate": 0.0,
+    }
+    if stability_policy.get("acceptance") != required_acceptance:
+        errors.append("stability policy acceptance thresholds are not exact")
     for stage, raw_stage_config in suite.get("stages", {}).items():
         stage_config = raw_stage_config if isinstance(raw_stage_config, dict) else {}
         artifact_configs = dict(stage_config.get("roles", {}))
@@ -116,6 +130,8 @@ def main() -> None:
                 errors.append(f"{stage}.{role}: missing placeholders {sorted(missing)}")
             if "PROMPT_ID:" not in prompt_text or "PROMPT_VERSION:" not in prompt_text:
                 errors.append(f"{stage}.{role}: prompt lacks ID/version headers")
+            if "STABILITY CONTRACT" not in prompt_text:
+                errors.append(f"{stage}.{role}: prompt lacks stability contract")
             try:
                 Draft202012Validator.check_schema(load_object(schema_path))
             except Exception as error:
@@ -163,6 +179,9 @@ def main() -> None:
             errors.append(f"stale prompt hash for {artifact['prompt_id']}")
         if sha256(schema_path) != artifact["schema_sha256"]:
             errors.append(f"stale schema hash for {artifact['prompt_id']}")
+        prompt_text = prompt_path.read_text(encoding="utf-8")
+        if f"PROMPT_VERSION: {artifact['version']}" not in prompt_text:
+            errors.append(f"manifest version mismatch for {artifact['prompt_id']}")
 
     benchmark_dir = screening_root / "benchmarks" / "candidates"
     benchmark_counts = {

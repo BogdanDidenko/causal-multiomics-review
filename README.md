@@ -77,10 +77,9 @@ python scripts/deduplicate.py input.csv data/normalized/canonical.csv \
 Run the active title/abstract prompt suite with an OpenAI-compatible endpoint:
 
 ```bash
-export SCREENING_API_KEY=...
+export OPENAI_API_KEY=...
 python scripts/run_screening.py data/normalized/canonical.csv runs/pilot-001 \
-  --stage title_abstract --model YOUR_MODEL \
-  --base-url https://api.example.com/v1
+  --stage title_abstract
 ```
 
 Full-text screening accepts JSONL records with a `sections` array containing
@@ -88,13 +87,20 @@ stable `section_id`, `heading`, and `text` fields:
 
 ```bash
 python scripts/run_screening.py full_text_records.jsonl runs/fulltext-pilot-001 \
-  --stage full_text --model YOUR_MODEL \
-  --base-url https://api.example.com/v1 --resume
+  --stage full_text --resume
 ```
 
 The active suite is declared in
-`protocol/screening/configs/prompt_suite_v0.2.0.json`; exact prompt/schema
+`protocol/screening/configs/prompt_suite_v0.3.0.json`; exact prompt/schema
 hashes are in `protocol/screening/prompt_manifest.json`.
+
+The active suite runs every agent with `gpt-5.6-luna` at medium reasoning
+effort. Establish stability before deployment with five independent repeats:
+
+```bash
+python scripts/run_stability.py data/normalized/canonical.csv runs/stability-title \
+  --stage title_abstract
+```
 
 API keys are read only from environment variables. The local helper
 `academic-api-env` can load the academic database credentials already stored
@@ -111,9 +117,9 @@ python scripts/probe_searches.py runs/search-calibration
 
 The protocol, calibrated query pack, seven-prompt suite, config-driven
 gates, benchmark candidate sets, audit utilities, tests, and CI are
-initialized. Prompts remain `draft_pending_benchmark` until expert annotation
-and the declared acceptance gates are complete. Search counts from 2026-07-18
-are calibration evidence, not final PRISMA counts.
+initialized. Prompts remain `draft_pending_stability_and_benchmark` until the
+five-run stability gate and expert benchmark acceptance gates pass. Search
+counts from 2026-07-18 are calibration evidence, not final PRISMA counts.
 
 ## License
 

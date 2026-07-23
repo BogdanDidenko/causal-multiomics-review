@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "empirical_primary",
+    "bio_health_scope",
+    "multiomics_status",
+    "integration_mode",
+    "omics_layers",
+    "relevant_causal_design",
+    "date_eligible",
+    "english_language",
+    "full_text_sufficient",
+    "first_failed_criterion",
+    "evidence_spans",
+    "uncertainty_reason",
+    "concise_rationale"
+  ],
+  "properties": {
+    "report_type": {
+      "enum": ["empirical_primary", "review_editorial", "protocol", "methods_only", "resource", "unclear"]
+    },
+    "empirical_primary": {"enum": ["yes", "no", "unclear"]},
+    "bio_health_scope": {"enum": ["yes", "no", "unclear"]},
+    "multiomics_status": {"enum": ["yes", "no", "unclear"]},
+    "integration_mode": {
+      "enum": [
+        "same_study_joint_integration",
+        "same_study_parallel_measurement",
+        "cross_dataset_integrated",
+        "external_context_only",
+        "single_layer_only",
+        "unclear"
+      ]
+    },
+    "omics_layers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/full_text_omics_layer"}
+    },
+    "relevant_causal_design": {"enum": ["yes", "no", "unclear"]},
+    "date_eligible": {"enum": ["yes", "no", "unclear"]},
+    "english_language": {"enum": ["yes", "no", "unclear"]},
+    "full_text_sufficient": {"enum": ["yes", "no", "unclear"]},
+    "first_failed_criterion": {"enum": ["IC1", "IC2", "IC3", "IC4", "IC5", "none", "unclear"]},
+    "evidence_spans": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/section_evidence"}
+    },
+    "uncertainty_reason": {"type": "string"},
+    "concise_rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "full_text_omics_layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "assay_or_data_source", "cohort_or_system", "origin", "analytic_role", "section_ids"],
+      "properties": {
+        "layer": {
+          "enum": ["genomics", "epigenomics", "transcriptomics", "proteomics", "metabolomics", "lipidomics", "microbiomics", "other_molecular_omics"]
+        },
+        "assay_or_data_source": {"type": "string", "minLength": 1},
+        "cohort_or_system": {"type": "string"},
+        "origin": {"enum": ["measured_in_report", "external_dataset_analyzed", "context_only", "unclear"]},
+        "analytic_role": {"type": "string"},
+        "section_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "section_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criterion", "section_id", "quote"],
+      "properties": {
+        "criterion": {"enum": ["IC1", "IC2", "IC3", "IC4", "IC5", "report_type", "multiomics_status"]},
+        "section_id": {"type": "string", "minLength": 1},
+        "quote": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

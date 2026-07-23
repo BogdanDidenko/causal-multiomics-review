@@ -639,12 +639,15 @@ def _manifest_artifacts(
 
 def _provider_runtime(provider: OpenAICompatibleProvider) -> dict[str, Any]:
     return {
-        "temperature": provider.temperature,
-        "top_p": provider.top_p,
-        "seed": provider.seed,
-        "n": provider.n,
-        "max_tokens": provider.max_tokens,
-        "response_format": provider.response_format,
+        "api_protocol": getattr(provider, "api_protocol", "unknown"),
+        "temperature": getattr(provider, "temperature", None),
+        "top_p": getattr(provider, "top_p", None),
+        "seed": getattr(provider, "seed", None),
+        "n": getattr(provider, "n", None),
+        "max_tokens": getattr(provider, "max_tokens", None),
+        "response_format": getattr(provider, "response_format", None),
+        "reasoning_effort": getattr(provider, "reasoning_effort", None),
+        "text_verbosity": getattr(provider, "text_verbosity", None),
     }
 
 

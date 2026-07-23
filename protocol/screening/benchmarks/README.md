@@ -45,7 +45,8 @@ Full text:
 - agreement within one evidence level: at least 0.95;
 - unknown or unsupported section citations: zero.
 
-The prompt manifest remains `draft_pending_benchmark` until these gates pass.
+The prompt manifest remains `draft_pending_stability_and_benchmark` until these
+gates and the stability gate pass.
 Prompt changes after looking at regression outcomes require a new prompt
 version and a fresh held-out benchmark.
 
@@ -53,10 +54,12 @@ Run `scripts/evaluate_prompt_benchmark.py` after annotation and screening. Its
 `acceptance` object reports each threshold and an overall `pass`, `fail`, or
 `not_evaluable` status; blank expert fields intentionally remain not evaluable.
 
-## Runtime Matrix
+## Stability Gate
 
-Development uses the 25-record set. Regression runs DeepSeek V4 Flash three
-times and GPT-OSS 120B twice. Full-corpus deployment runs DeepSeek V4 Flash,
-GPT-OSS 120B, and Nemotron 3 Super 120B twice each. Only a six-run unanimous
-`EXCLUDE` with one exclusion code may be automatically excluded; every other
-record proceeds to full text.
+All seven agent roles use `gpt-5.6-luna` with medium reasoning effort. Run the
+same frozen input five times with `scripts/run_stability.py`. Acceptance is
+100% schema success, exact agreement for final decision, decisive criteria, and
+full-text evidence level, plus a zero manual-review rate. The evaluator ignores
+free-text rationale wording but reports every disagreed criterion path. A failed
+gate means the task boundary or prompt is still under-specified: revise the
+next prompt version, then repeat the frozen evaluation.

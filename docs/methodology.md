@@ -83,12 +83,17 @@ context or exclusions. Colocalization is supporting validation rather than a
 standalone identification design, and model-system perturbation is not assumed
 to validate a population-level human effect.
 
-## Model Dependence
+## Stability Gate
 
-Prompt regression uses three DeepSeek repeats and two GPT-OSS repeats. Full
-deployment uses two runs each from DeepSeek V4 Flash, GPT-OSS 120B, and Nemotron
-3 Super 120B. Only six-run unanimous exclusions with the same controlled code
-are automatically excluded; any uncertainty or disagreement proceeds to full
-text. This policy follows the observed model dependence in the reference
-review, where cross-model disagreement was materially larger than simple
-within-run label noise.
+All seven agents use GPT 5.6 Luna Medium (`gpt-5.6-luna` with medium reasoning
+effort) through the Responses API. The same frozen input is run five times with
+the same model and configuration. The gate requires 100% schema success, exact
+agreement for final decision and every decisive criterion, exact full-text
+evidence-level agreement, and no manual-review result caused by the run.
+
+The evaluator compares a canonical criterion vector, not prose explanations or
+the exact wording of a quoted span. It therefore distinguishes harmless audit
+wording variation from a changed scientific judgment. Any disagreement is
+reported as a record ID and criterion path. That is a prompt-localization signal:
+the next prompt version must make the disputed boundary explicit before the
+pipeline is used for formal screening.

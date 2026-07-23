@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["selected_sections", "coverage_status", "missing_evidence_categories", "concise_rationale"],
+  "properties": {
+    "selected_sections": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["section_id", "purposes", "priority"],
+        "properties": {
+          "section_id": {"type": "string", "minLength": 1},
+          "purposes": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/evidence_category"}
+          },
+          "priority": {"enum": ["required", "supporting"]}
+        }
+      }
+    },
+    "coverage_status": {"enum": ["sufficient", "insufficient", "unclear"]},
+    "missing_evidence_categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/evidence_category"}
+    },
+    "concise_rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "evidence_category": {
+      "enum": [
+        "study_design",
+        "omics_data",
+        "identification",
+        "assumptions",
+        "diagnostics",
+        "primary_results",
+        "validation",
+        "limitations"
+      ]
+    }
+  }
+}

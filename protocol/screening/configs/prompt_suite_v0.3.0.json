@@ -1,0 +1,178 @@
+{
+  "schema_version": "1.1.0",
+  "suite_id": "causal_multiomics_screening",
+  "suite_version": "0.3.0",
+  "provider": {
+    "protocol": "openai_responses",
+    "base_url": "https://api.openai.com/v1",
+    "api_key_env": "OPENAI_API_KEY",
+    "model": "gpt-5.6-luna",
+    "display_name": "GPT 5.6 Luna Medium"
+  },
+  "runtime": {
+    "provider_protocol": "openai_responses",
+    "reasoning_effort": "medium",
+    "text_verbosity": "low",
+    "context_window": 32768,
+    "max_retries": 1,
+    "response_format": "json_schema"
+  },
+  "stages": {
+    "title_abstract": {
+      "input_format": "csv",
+      "max_tokens": 4000,
+      "roles": {
+        "scope_reviewer": {
+          "prompt": "prompts/title_abstract/v0.3.0/scope_reviewer.txt",
+          "schema": "schemas/title_abstract/v0.3.0/scope_reviewer.schema.json",
+          "exclude_if": [
+            {"field": "report_type", "in": ["review_editorial", "protocol", "methods_only", "resource"]},
+            {"field": "bio_health_scope", "equals": "no"},
+            {"field": "multiomics_status", "equals": "no"}
+          ],
+          "unclear_if": [
+            {"field": "report_type", "equals": "unclear"},
+            {"field": "bio_health_scope", "equals": "unclear"},
+            {"field": "multiomics_status", "equals": "unclear"},
+            {"field": "integration_mode", "equals": "unclear"}
+          ]
+        },
+        "causal_design_reviewer": {
+          "prompt": "prompts/title_abstract/v0.3.0/causal_design_reviewer.txt",
+          "schema": "schemas/title_abstract/v0.3.0/causal_design_reviewer.schema.json",
+          "exclude_if": [
+            {"field": "identification_status", "in": ["association_only", "no_relevant_design"]}
+          ],
+          "unclear_if": [
+            {"field": "identification_status", "equals": "unclear"}
+          ]
+        }
+      },
+      "adjudication": {
+        "prompt": "prompts/title_abstract/v0.3.0/adjudicator.txt",
+        "schema": "schemas/title_abstract/v0.3.0/adjudicator.schema.json",
+        "exclude_if": [
+          {"field": "report_type", "in": ["review_editorial", "protocol", "methods_only", "resource"]},
+          {"field": "bio_health_scope", "equals": "no"},
+          {"field": "multiomics_status", "equals": "no"},
+          {"field": "identification_status", "in": ["association_only", "no_relevant_design"]}
+        ],
+        "unclear_if": [
+          {"field": "report_type", "equals": "unclear"},
+          {"field": "bio_health_scope", "equals": "unclear"},
+          {"field": "multiomics_status", "equals": "unclear"},
+          {"field": "identification_status", "equals": "unclear"}
+        ]
+      },
+      "routing": {
+        "round_a_all_include": "seek_full_text",
+        "round_a_otherwise": "adjudicate",
+        "adjudicated_include": "seek_full_text",
+        "adjudicated_exclude": "exclude",
+        "adjudicated_unclear": "seek_full_text"
+      }
+    },
+    "full_text": {
+      "input_format": "jsonl",
+      "max_tokens": 16000,
+      "section_selector": {
+        "prompt": "prompts/full_text/v0.2.0/section_selector.txt",
+        "schema": "schemas/full_text/v0.2.0/section_selector.schema.json"
+      },
+      "roles": {
+        "eligibility_reviewer": {
+          "prompt": "prompts/full_text/v0.2.0/eligibility_reviewer.txt",
+          "schema": "schemas/full_text/v0.2.0/eligibility_reviewer.schema.json",
+          "exclude_if": [
+            {"field": "empirical_primary", "equals": "no"},
+            {"field": "bio_health_scope", "equals": "no"},
+            {"field": "multiomics_status", "equals": "no"},
+            {"field": "date_eligible", "equals": "no"},
+            {"field": "english_language", "equals": "no"}
+          ],
+          "unclear_if": [
+            {"field": "empirical_primary", "equals": "unclear"},
+            {"field": "bio_health_scope", "equals": "unclear"},
+            {"field": "multiomics_status", "equals": "unclear"},
+            {"field": "date_eligible", "equals": "unclear"},
+            {"field": "english_language", "equals": "unclear"},
+            {"field": "full_text_sufficient", "in": ["no", "unclear"]}
+          ]
+        },
+        "causal_evidence_reviewer": {
+          "prompt": "prompts/full_text/v0.2.0/causal_evidence_reviewer.txt",
+          "schema": "schemas/full_text/v0.2.0/causal_evidence_reviewer.schema.json",
+          "exclude_if": [
+            {"field": "identification_status", "in": ["association_only", "not_applicable"]}
+          ],
+          "unclear_if": [
+            {"field": "identification_status", "equals": "unclear"},
+            {"field": "estimand_complete", "equals": "unclear"},
+            {"field": "assumptions_assessable", "equals": "unclear"},
+            {"field": "validation_strength", "equals": "unclear"}
+          ]
+        }
+      },
+      "adjudication": {
+        "prompt": "prompts/full_text/v0.2.0/adjudicator.txt",
+        "schema": "schemas/full_text/v0.2.0/adjudicator.schema.json",
+        "exclude_if": [
+          {"field": "empirical_primary", "equals": "no"},
+          {"field": "bio_health_scope", "equals": "no"},
+          {"field": "multiomics_status", "equals": "no"},
+          {"field": "date_eligible", "equals": "no"},
+          {"field": "english_language", "equals": "no"},
+          {"field": "identification_status", "in": ["association_only", "not_applicable"]}
+        ],
+        "unclear_if": [
+          {"field": "empirical_primary", "equals": "unclear"},
+          {"field": "bio_health_scope", "equals": "unclear"},
+          {"field": "multiomics_status", "equals": "unclear"},
+          {"field": "full_text_sufficient", "in": ["no", "unclear"]},
+          {"field": "identification_status", "equals": "unclear"},
+          {"field": "estimand_complete", "equals": "unclear"},
+          {"field": "assumptions_assessable", "equals": "unclear"},
+          {"field": "validation_strength", "equals": "unclear"}
+        ]
+      },
+      "routing": {
+        "round_a_all_include": "assessed",
+        "round_a_otherwise": "adjudicate",
+        "adjudicated_include": "assessed",
+        "adjudicated_exclude": "assessed",
+        "adjudicated_unclear": "manual_review"
+      }
+    }
+  },
+  "evidence_level_rules": {
+    "analytic_levels": [2, 3, 4],
+    "labels": {
+      "0": "context_only",
+      "1": "associational",
+      "2": "causal_hypothesis",
+      "3": "causal_evidence",
+      "4": "causal_evidence"
+    }
+  },
+  "stability_policy": {
+    "model": "gpt-5.6-luna",
+    "repeats": 5,
+    "agent_stages": [
+      "scope_reviewer",
+      "causal_design_reviewer",
+      "title_abstract_adjudicator",
+      "section_selector",
+      "fulltext_eligibility_reviewer",
+      "causal_evidence_reviewer",
+      "fulltext_adjudicator"
+    ],
+    "acceptance": {
+      "schema_success_rate": 1.0,
+      "final_decision_exact_agreement": 1.0,
+      "decisive_criteria_exact_agreement": 1.0,
+      "causal_evidence_level_exact_agreement": 1.0,
+      "manual_review_rate": 0.0
+    },
+    "on_instability": "localize_disagreeing_criterion_then_revise_prompt_version"
+  }
+}

@@ -3,10 +3,12 @@
 The unversioned prompt files and `gate_config.json` are the immutable legacy
 `v0.1.0` title/abstract contract. They remain available for reproduction.
 
-The active suite is `configs/prompt_suite_v0.2.0.json`:
+The active suite is `configs/prompt_suite_v0.3.0.json`:
 
-- title/abstract prompts are version `0.2.0`;
-- full-text prompts are version `0.1.0`;
+- title/abstract prompts are version `0.3.0`;
+- full-text prompts are version `0.2.0`;
+- every active agent uses OpenAI Responses API with `gpt-5.6-luna`, medium
+  reasoning effort, and low text verbosity;
 - `prompt_manifest.json` records exact prompt, schema, and config hashes;
 - schemas use JSON Schema Draft 2020-12 and permit nested evidence objects.
 
@@ -31,5 +33,7 @@ full text, invalid section citation, or decisive uncertainty becomes
 record IDs and appends new checkpointed outputs.
 
 The annotation-pending benchmark candidates and acceptance gates are under
-`benchmarks/`. The active prompts are not approved production classifiers until
-the expert benchmark passes and the manifest status is updated.
+`benchmarks/`. Run `scripts/run_stability.py` before any deployment: it makes
+five independent calls per record and writes the exact disagreeing criterion
+paths. The active prompts are not approved production classifiers until both
+the stability gate and expert benchmark pass and the manifest status is updated.

@@ -1,77 +1,77 @@
 {
   "manifest_version": "1.0.0",
-  "active_suite": "causal_multiomics_screening@0.2.0",
+  "active_suite": "causal_multiomics_screening@0.3.0",
   "suite_config": {
-    "path": "configs/prompt_suite_v0.2.0.json",
-    "sha256": "b8e2afb6dad57b4c34cbb7a7aa36e9bf2173b5eb89f00766d45cfd586f69e726"
+    "path": "configs/prompt_suite_v0.3.0.json",
+    "sha256": "ca752df1f63023b197704939459de9d3e780d8526e446726fd17a2c34c0686fb"
   },
-  "approval_status": "draft_pending_benchmark",
+  "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
   "benchmark_version": "candidate_sets_v0.1.0_annotation_pending",
-  "created_date": "2026-07-21",
-  "change_note": "Adds causal multi-omics title/abstract v0.2.0 and full-text v0.1.0 prompt contracts without modifying legacy v0.1.0 artifacts.",
+  "created_date": "2026-07-23",
+  "change_note": "Promotes a single-model GPT 5.6 Luna Medium suite with canonical criterion ordering and a mandatory five-run stability gate; prior versioned artifacts remain immutable.",
   "artifacts": [
     {
       "prompt_id": "causal_multiomics.title_abstract.scope_reviewer",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.2.0/scope_reviewer.txt",
-      "prompt_sha256": "42de35666974b86f8797be381c5046878bd9e10a371a75e118a478abac6a4948",
-      "schema_path": "schemas/title_abstract/v0.2.0/scope_reviewer.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.3.0/scope_reviewer.txt",
+      "prompt_sha256": "205879ef99d9fa8fbb6208a2ccf387fd2df986afe9007150c2e939a343fda927",
+      "schema_path": "schemas/title_abstract/v0.3.0/scope_reviewer.schema.json",
       "schema_sha256": "2bad62f8ae68293dc66aab72c5892db8a6ad89ffe24d9d3d34e33dfc54e2d215"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.causal_design_reviewer",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.2.0/causal_design_reviewer.txt",
-      "prompt_sha256": "bc7f7821ec6fda6c2195d05c4112b6be688ea232f6473bb309cbab36bab1fcc2",
-      "schema_path": "schemas/title_abstract/v0.2.0/causal_design_reviewer.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.3.0/causal_design_reviewer.txt",
+      "prompt_sha256": "e9aa66f7703ec397bf9bbc696a9ce43151e54be2307eeff29cd701adabfaf75e",
+      "schema_path": "schemas/title_abstract/v0.3.0/causal_design_reviewer.schema.json",
       "schema_sha256": "fe89fa3c05da652a36fd68f2a1cb43f243d9cac34045651533228844583620c3"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.adjudicator",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.2.0/adjudicator.txt",
-      "prompt_sha256": "d9e6f38d7919acb7b5ca3f0c67eebd4e4fd1aeef6e70d7c67502504197a43461",
-      "schema_path": "schemas/title_abstract/v0.2.0/adjudicator.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.3.0/adjudicator.txt",
+      "prompt_sha256": "c34d3cf46f4e29975b19ee7c19c9c78e9655a346d2ab7f0bc227b04df1a87dae",
+      "schema_path": "schemas/title_abstract/v0.3.0/adjudicator.schema.json",
       "schema_sha256": "f59b4c9514e5e20fa7dc7105d37c602d0d2be8d7eb977b495465a97b3297fb84"
     },
     {
       "prompt_id": "causal_multiomics.full_text.section_selector",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "stage": "full_text",
-      "prompt_path": "prompts/full_text/v0.1.0/section_selector.txt",
-      "prompt_sha256": "78f97baa73b9140243dcc68dd8e9fac84af7283daab2da119799491d3baad4b2",
-      "schema_path": "schemas/full_text/v0.1.0/section_selector.schema.json",
+      "prompt_path": "prompts/full_text/v0.2.0/section_selector.txt",
+      "prompt_sha256": "c0d3a6e60a64e6232078a8e7e37a81445d7179d030d85102d8f23e974cb8de56",
+      "schema_path": "schemas/full_text/v0.2.0/section_selector.schema.json",
       "schema_sha256": "c458add7f847f64d29dbb294691c3256b322d20553999796bb93d5709b0bf982"
     },
     {
       "prompt_id": "causal_multiomics.full_text.eligibility_reviewer",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "stage": "full_text",
-      "prompt_path": "prompts/full_text/v0.1.0/eligibility_reviewer.txt",
-      "prompt_sha256": "e5447a4742bc477e9b4572970491b1df36573110e3b0a1b67f22c9a39b244085",
-      "schema_path": "schemas/full_text/v0.1.0/eligibility_reviewer.schema.json",
+      "prompt_path": "prompts/full_text/v0.2.0/eligibility_reviewer.txt",
+      "prompt_sha256": "b5bde452d9c57bb99805e9433c40d4ae24036a1e76cffb4f5a584e0184a67dd6",
+      "schema_path": "schemas/full_text/v0.2.0/eligibility_reviewer.schema.json",
       "schema_sha256": "a5de785d27934a507f942233a4f37cb83e77b04d9c8849acb459a97e38124e95"
     },
     {
       "prompt_id": "causal_multiomics.full_text.causal_evidence_reviewer",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "stage": "full_text",
-      "prompt_path": "prompts/full_text/v0.1.0/causal_evidence_reviewer.txt",
-      "prompt_sha256": "983978318081f3e36e46c8ae0b37897444434f951d2afc5edd536a7ebfcf365a",
-      "schema_path": "schemas/full_text/v0.1.0/causal_evidence_reviewer.schema.json",
+      "prompt_path": "prompts/full_text/v0.2.0/causal_evidence_reviewer.txt",
+      "prompt_sha256": "1218bf1f38b4e367506a12e492c54859186a289f835ab0650b667683fab11a24",
+      "schema_path": "schemas/full_text/v0.2.0/causal_evidence_reviewer.schema.json",
       "schema_sha256": "d1ac9ed3f91e082bcf358776371b40b9ddc7769b73dde72cdca5ed195f250ba1"
     },
     {
       "prompt_id": "causal_multiomics.full_text.adjudicator",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "stage": "full_text",
-      "prompt_path": "prompts/full_text/v0.1.0/adjudicator.txt",
-      "prompt_sha256": "3ff54c9c1e301a12d3b72cf2eb7112c7bdca9349d0ca212b2337e0274938616a",
-      "schema_path": "schemas/full_text/v0.1.0/adjudicator.schema.json",
+      "prompt_path": "prompts/full_text/v0.2.0/adjudicator.txt",
+      "prompt_sha256": "82cd88dde7a9f3168d6d82f99aba33b599d7266998e3d2332cb961b4f144c154",
+      "schema_path": "schemas/full_text/v0.2.0/adjudicator.schema.json",
       "schema_sha256": "f4372a2d39d723bf632699a30b79798b1cf6446dced8b83b81b9a0852b8173bf"
     }
   ]
