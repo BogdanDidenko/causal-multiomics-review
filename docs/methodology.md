@@ -87,7 +87,8 @@ to validate a population-level human effect.
 
 All seven agents use GPT 5.6 Terra Medium (`gpt-5.6-terra` with medium reasoning
 effort) through isolated `codex exec` calls. Each call is ephemeral, ignores
-local Codex configuration and project rules, and runs in a read-only sandbox.
+local Codex configuration and project rules, uses a temporary authentication-only
+Codex home, pins `codex-cli 0.145.0`, and runs in a read-only sandbox.
 The same frozen input is run five times with the same model and configuration.
 The gate requires 100% schema success, exact agreement for final decision and
 every decisive criterion, exact full-text evidence-level agreement, and no

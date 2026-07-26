@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import os
+import shutil
 import ssl
 import subprocess
 import tempfile
@@ -187,6 +189,10 @@ class CodexCliProvider:
         ephemeral: bool = True,
         ignore_user_config: bool = True,
         ignore_rules: bool = True,
+        isolated_home: bool = True,
+        auth_path: str | Path | None = None,
+        required_cli_version: str | None = None,
+        codex_version: str | None = None,
         max_tokens: int | None = None,
     ) -> None:
         self.model = model
@@ -199,6 +205,14 @@ class CodexCliProvider:
         self.ephemeral = ephemeral
         self.ignore_user_config = ignore_user_config
         self.ignore_rules = ignore_rules
+        self.isolated_home = isolated_home
+        self.auth_path = Path(auth_path).expanduser() if auth_path else None
+        self.codex_version = codex_version or _read_codex_version(codex_bin, timeout)
+        if required_cli_version and self.codex_version != required_cli_version:
+            raise ProviderError(
+                f"Codex CLI version {self.codex_version!r} does not match "
+                f"required version {required_cli_version!r}"
+            )
         self.max_tokens = max_tokens
         self.response_format = "json_schema"
 
@@ -245,6 +259,18 @@ class CodexCliProvider:
                 command.append("--ignore-user-config")
             if self.ignore_rules:
                 command.append("--ignore-rules")
+            environment = None
+            if self.isolated_home:
+                codex_home = workdir / "codex-home"
+                codex_home.mkdir(mode=0o700)
+                source_auth = self.auth_path or _default_codex_auth_path()
+                if not source_auth.is_file():
+                    raise ProviderError(
+                        f"Codex authentication file not found: {source_auth}"
+                    )
+                shutil.copy2(source_auth, codex_home / "auth.json")
+                environment = os.environ.copy()
+                environment["CODEX_HOME"] = str(codex_home)
             try:
                 completed = subprocess.run(
                     command,
@@ -252,6 +278,7 @@ class CodexCliProvider:
                     text=True,
                     capture_output=True,
                     cwd=workdir,
+                    env=environment,
                     timeout=self.timeout,
                     check=False,
                 )
@@ -318,6 +345,30 @@ def _codex_output_schema(value: Any) -> Any:
     if isinstance(value, list):
         return [_codex_output_schema(item) for item in value]
     return value
+
+
+def _default_codex_auth_path() -> Path:
+    configured_home = os.environ.get("CODEX_HOME")
+    codex_home = Path(configured_home).expanduser() if configured_home else Path.home() / ".codex"
+    return codex_home / "auth.json"
+
+
+def _read_codex_version(codex_bin: str, timeout: int) -> str:
+    try:
+        completed = subprocess.run(
+            [codex_bin, "--version"],
+            text=True,
+            capture_output=True,
+            timeout=min(timeout, 30),
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise ProviderError(f"Could not determine Codex CLI version: {error}") from error
+    if completed.returncode:
+        raise ProviderError(
+            f"Could not determine Codex CLI version: {completed.stderr.strip()}"
+        )
+    return completed.stdout.strip()
 
 
 def _as_text(value: str | bytes | None) -> str | None:

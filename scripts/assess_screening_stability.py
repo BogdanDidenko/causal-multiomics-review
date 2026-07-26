@@ -89,6 +89,8 @@ def _validate_run_manifest(
         "ephemeral": suite["provider"]["ephemeral"],
         "ignore_user_config": suite["provider"]["ignore_user_config"],
         "ignore_rules": suite["provider"]["ignore_rules"],
+        "isolated_home": suite["provider"]["isolated_home"],
+        "codex_cli_version": suite["provider"]["codex_cli_version"],
     }
     for field, expected in expected_runtime.items():
         actual = runtime.get(field)

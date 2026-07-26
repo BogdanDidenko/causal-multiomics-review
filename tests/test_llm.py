@@ -44,8 +44,12 @@ def test_responses_output_text_supports_explicit_and_nested_shapes() -> None:
     ) == '{"ok": true}'
 
 
-def test_codex_cli_provider_fixes_terra_medium_and_enforces_schema(monkeypatch) -> None:
+def test_codex_cli_provider_fixes_terra_medium_and_enforces_schema(
+    monkeypatch, tmp_path
+) -> None:
     captured: dict[str, object] = {}
+    auth_path = tmp_path / "auth.json"
+    auth_path.write_text('{"auth_mode": "test"}', encoding="utf-8")
 
     def fake_run(command, **kwargs):
         captured["command"] = command
@@ -53,11 +57,22 @@ def test_codex_cli_provider_fixes_terra_medium_and_enforces_schema(monkeypatch) 
         schema_path = Path(command[command.index("--output-schema") + 1])
         output_path = Path(command[command.index("--output-last-message") + 1])
         captured["schema"] = json.loads(schema_path.read_text())
+        captured["codex_home"] = kwargs["env"]["CODEX_HOME"]
+        captured["auth"] = json.loads(
+            (Path(kwargs["env"]["CODEX_HOME"]) / "auth.json").read_text()
+        )
         output_path.write_text('{"decision": "include"}')
         return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
 
     monkeypatch.setattr("causal_multiomics_review.llm.subprocess.run", fake_run)
-    provider = CodexCliProvider("gpt-5.6-terra", timeout=123, max_tokens=4000)
+    provider = CodexCliProvider(
+        "gpt-5.6-terra",
+        timeout=123,
+        auth_path=auth_path,
+        required_cli_version="codex-cli 0.145.0",
+        codex_version="codex-cli 0.145.0",
+        max_tokens=4000,
+    )
     canonical_schema = {
         "type": "object",
         "properties": {
@@ -87,6 +102,9 @@ def test_codex_cli_provider_fixes_terra_medium_and_enforces_schema(monkeypatch) 
     assert "--ephemeral" in command
     assert "--ignore-user-config" in command
     assert "--ignore-rules" in command
+    assert captured["auth"] == {"auth_mode": "test"}
+    assert captured["codex_home"] != str(Path.home() / ".codex")
+    assert provider.codex_version == "codex-cli 0.145.0"
     assert captured["prompt"] == "Return the screening decision."
     assert captured["schema"] == {
         "type": "object",

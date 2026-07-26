@@ -69,6 +69,8 @@ def test_stability_cli_requires_matching_terra_manifests(tmp_path) -> None:
                         "ephemeral": True,
                         "ignore_user_config": True,
                         "ignore_rules": True,
+                        "isolated_home": True,
+                        "codex_cli_version": "codex-cli 0.145.0",
                     },
                 }
             ),
@@ -117,6 +119,8 @@ def test_stability_cli_rejects_reasoning_effort_drift(tmp_path) -> None:
                         "ephemeral": True,
                         "ignore_user_config": True,
                         "ignore_rules": True,
+                        "isolated_home": True,
+                        "codex_cli_version": "codex-cli 0.145.0",
                     },
                 }
             ),

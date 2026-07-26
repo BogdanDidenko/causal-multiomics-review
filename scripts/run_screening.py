@@ -103,6 +103,8 @@ def main() -> None:
             ephemeral=provider_config["ephemeral"],
             ignore_user_config=provider_config["ignore_user_config"],
             ignore_rules=provider_config["ignore_rules"],
+            isolated_home=provider_config["isolated_home"],
+            required_cli_version=provider_config["codex_cli_version"],
             max_tokens=args.max_tokens or stage_config["max_tokens"],
         )
     else:

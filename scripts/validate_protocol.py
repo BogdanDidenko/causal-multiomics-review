@@ -59,7 +59,7 @@ def main() -> None:
                 errors.append(f"{role}: missing prompt placeholders {sorted(missing)}")
 
     screening_root = PROTOCOL / "screening"
-    suite_path = screening_root / "configs" / "prompt_suite_v0.5.0.json"
+    suite_path = screening_root / "configs" / "prompt_suite_v0.6.0.json"
     suite = load_object(suite_path)
     expected_runtime = {
         "provider_protocol": "codex_cli",
@@ -73,6 +73,7 @@ def main() -> None:
             errors.append(f"suite runtime {field} must be {expected}")
     expected_provider = {
         "protocol": "codex_cli",
+        "codex_cli_version": "codex-cli 0.145.0",
         "model": "gpt-5.6-terra",
         "display_name": "GPT 5.6 Terra Medium",
         "sandbox": "read-only",
@@ -80,6 +81,7 @@ def main() -> None:
         "ephemeral": True,
         "ignore_user_config": True,
         "ignore_rules": True,
+        "isolated_home": True,
     }
     for field, expected in expected_provider.items():
         if suite.get("provider", {}).get(field) != expected:

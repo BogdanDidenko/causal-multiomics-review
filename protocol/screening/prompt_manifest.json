@@ -1,15 +1,15 @@
 {
   "manifest_version": "1.0.0",
-  "active_suite": "causal_multiomics_screening@0.5.0",
+  "active_suite": "causal_multiomics_screening@0.6.0",
   "suite_config": {
-    "path": "configs/prompt_suite_v0.5.0.json",
-    "sha256": "dcf239fc602cd71ec0cd2f93bd30db69f2b8bd9160e29d34a0f6f541046f47d5"
+    "path": "configs/prompt_suite_v0.6.0.json",
+    "sha256": "68bf42ec14c7f861d2101462653fa013deb2641ae6cbf1e021e617a4968e3388"
   },
   "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
   "benchmark_version": "candidate_sets_v0.1.0_annotation_pending",
   "created_date": "2026-07-23",
-  "change_note": "Promotes GPT 5.6 Terra Medium for every isolated Codex CLI reviewer call while preserving the frozen prompts, schemas, and mandatory five-run stability gate; prior versioned suites remain immutable.",
+  "change_note": "Runs GPT 5.6 Terra Medium in an authentication-only temporary Codex home for every reviewer call, excluding global skills, plugins, MCP servers, and user state while preserving frozen prompts, schemas, and the five-run stability gate.",
   "artifacts": [
     {
       "prompt_id": "causal_multiomics.title_abstract.scope_reviewer",
