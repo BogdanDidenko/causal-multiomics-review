@@ -216,7 +216,8 @@ class CodexCliProvider:
             schema_path = workdir / f"{schema_name}.schema.json"
             output_path = workdir / "last_message.json"
             schema_path.write_text(
-                json.dumps(schema, ensure_ascii=False), encoding="utf-8"
+                json.dumps(_codex_output_schema(schema), ensure_ascii=False),
+                encoding="utf-8",
             )
             command = [
                 self.codex_bin,
@@ -305,6 +306,18 @@ def _strip_code_fence(value: str) -> str:
         text = text.split("\n", 1)[1]
         text = text.rsplit("```", 1)[0]
     return text.strip()
+
+
+def _codex_output_schema(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {
+            key: _codex_output_schema(item)
+            for key, item in value.items()
+            if key != "uniqueItems"
+        }
+    if isinstance(value, list):
+        return [_codex_output_schema(item) for item in value]
+    return value
 
 
 def _as_text(value: str | bytes | None) -> str | None:

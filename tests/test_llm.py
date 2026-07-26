@@ -58,9 +58,20 @@ def test_codex_cli_provider_fixes_terra_medium_and_enforces_schema(monkeypatch) 
 
     monkeypatch.setattr("causal_multiomics_review.llm.subprocess.run", fake_run)
     provider = CodexCliProvider("gpt-5.6-terra", timeout=123, max_tokens=4000)
+    canonical_schema = {
+        "type": "object",
+        "properties": {
+            "decision": {"type": "string"},
+            "reasons": {
+                "type": "array",
+                "uniqueItems": True,
+                "items": {"type": "string"},
+            },
+        },
+    }
     answer, raw = provider.complete_json(
         "Return the screening decision.",
-        {"type": "object", "properties": {"decision": {"type": "string"}}},
+        canonical_schema,
         "scope_reviewer",
     )
 
@@ -79,7 +90,11 @@ def test_codex_cli_provider_fixes_terra_medium_and_enforces_schema(monkeypatch) 
     assert captured["prompt"] == "Return the screening decision."
     assert captured["schema"] == {
         "type": "object",
-        "properties": {"decision": {"type": "string"}},
+        "properties": {
+            "decision": {"type": "string"},
+            "reasons": {"type": "array", "items": {"type": "string"}},
+        },
     }
+    assert canonical_schema["properties"]["reasons"]["uniqueItems"] is True
     assert answer == {"decision": "include"}
     assert raw["transport"] == "codex_cli"
