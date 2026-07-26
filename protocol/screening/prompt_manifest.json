@@ -7,7 +7,7 @@
   },
   "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
-  "benchmark_version": "candidate_sets_v0.1.0_annotation_pending",
+  "benchmark_version": "candidate_sets_v0.1.1_annotation_pending",
   "created_date": "2026-07-23",
   "change_note": "Refines title/abstract design-family and design-role boundaries after the Terra development canary localized instability in mediation, temporal, and randomized-intervention classifications; the isolated pinned runtime and five-run gate are unchanged.",
   "artifacts": [

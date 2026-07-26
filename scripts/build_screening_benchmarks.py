@@ -134,25 +134,39 @@ def unique_extend(
 
 
 def build_high_signal(rows: list[dict[str, str]], seed: str) -> list[dict[str, str]]:
+    eligible = [
+        row
+        for row in rows
+        if normalized_text(row.get("title", ""))
+        and normalized_text(row.get("abstract", ""))
+    ]
     selected: list[dict[str, str]] = []
     groups = [
-        [row for row in rows if row.get("final_study_label") == "causal_hypothesis"],
-        [row for row in rows if row.get("title_abstract_decision") == "exclude"],
         [
             row
-            for row in rows
+            for row in eligible
+            if row.get("final_study_label") == "causal_hypothesis"
+        ],
+        [
+            row
+            for row in eligible
+            if row.get("title_abstract_decision") == "exclude"
+        ],
+        [
+            row
+            for row in eligible
             if row.get("final_study_label") == "causal_evidence"
             and design_bucket(row) != "genetic_instrument"
         ],
         [
             row
-            for row in rows
+            for row in eligible
             if row.get("title_abstract_decision") in {"pending", "seek_full_text"}
             and len(row.get("abstract", "")) < 500
         ],
         [
             row
-            for row in rows
+            for row in eligible
             if any(
                 term in (row.get("title", "") + " " + row.get("abstract", "")).lower()
                 for term in ("colocal", "bayesian network", "mediation", "randomized", "randomised")
@@ -163,7 +177,7 @@ def build_high_signal(rows: list[dict[str, str]], seed: str) -> list[dict[str, s
         target = (index + 1) * 5
         unique_extend(selected, stable_order(group, f"{seed}-high-{index}"), target)
     if len(selected) < 25:
-        unique_extend(selected, stable_order(rows, f"{seed}-high-fill"), 25)
+        unique_extend(selected, stable_order(eligible, f"{seed}-high-fill"), 25)
     return [dict(row) for row in selected[:25]]
 
 
@@ -293,38 +307,51 @@ def main() -> None:
     full_text = build_full_text(rows, args.seed)
     section_gold = round_robin(full_text, 20, f"{args.seed}-section-gold")
 
+    high_signal_path = args.output_dir / "high_signal_development_25.csv"
+    regression_path = args.output_dir / "title_abstract_regression_116.csv"
+    full_text_path = args.output_dir / "full_text_benchmark_60.csv"
+    section_gold_path = args.output_dir / "section_selector_gold_20.csv"
+
     write_csv(
-        args.output_dir / "high_signal_development_25.csv",
+        high_signal_path,
         TITLE_FIELDS,
         [title_row(row) for row in high_signal],
     )
     write_csv(
-        args.output_dir / "title_abstract_regression_116.csv",
+        regression_path,
         TITLE_FIELDS,
         [title_row(row) for row in regression],
     )
     write_csv(
-        args.output_dir / "full_text_benchmark_60.csv",
+        full_text_path,
         FULL_TEXT_FIELDS,
         [full_text_row(row) for row in full_text],
     )
     write_csv(
-        args.output_dir / "section_selector_gold_20.csv",
+        section_gold_path,
         FULL_TEXT_FIELDS,
         [full_text_row(row) for row in section_gold],
     )
     write_manifest(
         args.output_dir / "manifest.json",
         {
+            "benchmark_version": "candidate_sets_v0.1.1",
             "status": "annotation_pending",
             "input_file": args.ledger.name,
             "input_sha256": sha256_file(args.ledger),
             "seed": args.seed,
+            "development_set_eligibility": "nonempty_title_and_abstract",
             "counts": {
                 "high_signal_development": len(high_signal),
                 "title_abstract_regression": len(regression),
                 "full_text_benchmark": len(full_text),
                 "section_selector_gold": len(section_gold),
+            },
+            "output_sha256": {
+                high_signal_path.name: sha256_file(high_signal_path),
+                regression_path.name: sha256_file(regression_path),
+                full_text_path.name: sha256_file(full_text_path),
+                section_gold_path.name: sha256_file(section_gold_path),
             },
             "ground_truth_policy": (
                 "Existing decisions are sampling hints only; expert fields require "

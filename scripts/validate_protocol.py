@@ -191,6 +191,14 @@ def main() -> None:
             errors.append(f"manifest version mismatch for {artifact['prompt_id']}")
 
     benchmark_dir = screening_root / "benchmarks" / "candidates"
+    benchmark_manifest = load_object(benchmark_dir / "manifest.json")
+    expected_benchmark_version = (
+        f"{benchmark_manifest.get('benchmark_version')}_annotation_pending"
+    )
+    if manifest.get("benchmark_version") != expected_benchmark_version:
+        errors.append(
+            "prompt manifest benchmark version does not match candidate manifest"
+        )
     benchmark_counts = {
         "high_signal_development_25.csv": 25,
         "title_abstract_regression_116.csv": 116,
@@ -223,6 +231,20 @@ def main() -> None:
             errors.append(
                 f"{filename}: expected {expected_count} records, found {actual_count}"
             )
+        expected_hash = benchmark_manifest.get("output_sha256", {}).get(filename)
+        if expected_hash != sha256(path):
+            errors.append(f"{filename}: stale or missing candidate manifest hash")
+        if filename == "high_signal_development_25.csv":
+            incomplete = [
+                row.get("canonical_id", "")
+                for row in rows
+                if not row.get("title", "").strip()
+                or not row.get("abstract", "").strip()
+            ]
+            if incomplete:
+                errors.append(
+                    f"{filename}: title/abstract required for {len(incomplete)} records"
+                )
         if filename in expected_strata:
             actual_strata = Counter(row.get("sampling_stratum", "") for row in rows)
             if dict(actual_strata) != expected_strata[filename]:

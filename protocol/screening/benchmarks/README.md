@@ -6,7 +6,9 @@ only as sampling provenance. They are not ground truth.
 
 ## Candidate Sets
 
-- `high_signal_development_25.csv`: prompt iteration only; never report final
+- `high_signal_development_25.csv`: prompt iteration only; every record has a
+  nonempty title and abstract so the zero-manual-review stability gate tests
+  model behavior rather than metadata availability. Never report final
   performance on this set.
 - `title_abstract_regression_116.csv`: 42 candidate Levels 2-4, 42 candidate
   exclusions, and 32 boundary/unclear records.
