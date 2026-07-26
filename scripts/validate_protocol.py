@@ -59,7 +59,7 @@ def main() -> None:
                 errors.append(f"{role}: missing prompt placeholders {sorted(missing)}")
 
     screening_root = PROTOCOL / "screening"
-    suite_path = screening_root / "configs" / "prompt_suite_v0.11.0.json"
+    suite_path = screening_root / "configs" / "prompt_suite_v0.13.0.json"
     suite = load_object(suite_path)
     expected_runtime = {
         "provider_protocol": "codex_cli",
