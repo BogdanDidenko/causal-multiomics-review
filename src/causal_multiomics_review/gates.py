@@ -14,7 +14,16 @@ def _matches(answer: dict[str, Any], condition: dict[str, Any]) -> bool:
     raise ValueError(f"Unsupported gate condition: {condition}")
 
 
-def gate_answer(answer: dict[str, Any], role_config: dict[str, Any]) -> GateDecision:
+def gate_answer(
+    answer: dict[str, Any],
+    role_config: dict[str, Any],
+    *,
+    exclude_first: bool = False,
+) -> GateDecision:
+    if exclude_first and any(
+        _matches(answer, rule) for rule in role_config.get("exclude_if", [])
+    ):
+        return "exclude"
     if any(_matches(answer, rule) for rule in role_config.get("unclear_if", [])):
         return "unclear"
     if any(_matches(answer, rule) for rule in role_config.get("exclude_if", [])):
@@ -28,8 +37,13 @@ def route_round_a(
     role_configs = config.get("round_a", config.get("roles"))
     if not role_configs:
         raise ValueError("Stage config must define round_a or roles")
+    exclude_first = config.get("gate_precedence") == "exclude_then_unclear"
     decisions = {
-        role: gate_answer(answers[role], role_config)
+        role: gate_answer(
+            answers[role],
+            role_config,
+            exclude_first=exclude_first,
+        )
         for role, role_config in role_configs.items()
     }
     route = (
@@ -41,6 +55,10 @@ def route_round_a(
 
 
 def route_adjudicated(answer: dict[str, Any], config: dict[str, Any]) -> tuple[str, GateDecision]:
-    decision = gate_answer(answer, config["adjudication"])
+    decision = gate_answer(
+        answer,
+        config["adjudication"],
+        exclude_first=config.get("gate_precedence") == "exclude_then_unclear",
+    )
     route = config["routing"][f"adjudicated_{decision}"]
     return route, decision

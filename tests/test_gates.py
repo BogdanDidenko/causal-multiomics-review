@@ -30,6 +30,18 @@ def test_unclear_has_priority_over_exclusion() -> None:
     assert gate_answer(answer, config["round_a"]["scope_reviewer"]) == "unclear"
 
 
+def test_active_suite_can_prioritize_explicit_exclusion() -> None:
+    config = load_gate_config()
+    config["gate_precedence"] = "exclude_then_unclear"
+    answer = {
+        "paper_type": "review_editorial",
+        "bio_health_scope": "yes",
+        "multiomics_present": "unclear",
+        "causal_design_present": "unclear",
+    }
+    assert route_adjudicated(answer, config) == ("exclude", "exclude")
+
+
 def test_adjudicator_routes_failed_causal_design_to_exclusion() -> None:
     config = load_gate_config()
     answer = {

@@ -1,15 +1,15 @@
 {
   "manifest_version": "1.0.0",
-  "active_suite": "causal_multiomics_screening@0.7.0",
+  "active_suite": "causal_multiomics_screening@0.8.0",
   "suite_config": {
-    "path": "configs/prompt_suite_v0.7.0.json",
-    "sha256": "b40737f511bd0c4641c036893063bc2dadfd29febd7db640fda6fffe8ca0ca09"
+    "path": "configs/prompt_suite_v0.8.0.json",
+    "sha256": "c336f5380a0309f66ee5f24b661cc7d3651a01b2248bce4eaafa453bc2f78d8d"
   },
   "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
   "benchmark_version": "candidate_sets_v0.1.1_annotation_pending",
   "created_date": "2026-07-23",
-  "change_note": "Refines title/abstract design-family and design-role boundaries after the Terra development canary localized instability in mediation, temporal, and randomized-intervention classifications; the isolated pinned runtime and five-run gate are unchanged.",
+  "change_note": "Makes explicit EC1-EC6 evidence precede unrelated unclear fields in active Python gates after the development run localized an editorial-versus-thin-multiomics routing instability; prompts and isolated Terra runtime are unchanged.",
   "artifacts": [
     {
       "prompt_id": "causal_multiomics.title_abstract.scope_reviewer",

@@ -23,6 +23,7 @@ def main() -> None:
     parser.add_argument("--codex-timeout", type=int)
     parser.add_argument("--model")
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--record-id", action="append", default=[])
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
 
@@ -52,6 +53,8 @@ def main() -> None:
         _append_option(command, "--codex-timeout", args.codex_timeout)
         _append_option(command, "--model", args.model)
         _append_option(command, "--limit", args.limit)
+        for record_id in args.record_id:
+            command.extend(("--record-id", record_id))
         if args.resume:
             command.append("--resume")
         subprocess.run(command, check=True)

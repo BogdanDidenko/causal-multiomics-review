@@ -3,7 +3,7 @@
 The unversioned prompt files and `gate_config.json` are the immutable legacy
 `v0.1.0` title/abstract contract. They remain available for reproduction.
 
-The active suite is `configs/prompt_suite_v0.7.0.json`:
+The active suite is `configs/prompt_suite_v0.8.0.json`:
 
 - title/abstract prompts are version `0.4.0`;
 - full-text prompts are version `0.2.0`;
@@ -11,6 +11,8 @@ The active suite is `configs/prompt_suite_v0.7.0.json`:
   medium reasoning effort; the runs are ephemeral, read-only, and ignore local
   Codex configuration and project rules; a temporary authentication-only Codex
   home prevents global skills, plugins, and MCP servers from entering calls;
+- explicit criterion-level exclusions take precedence over unrelated
+  `unclear` fields; the immutable legacy gate retains its original precedence;
 - `prompt_manifest.json` records exact prompt, schema, and config hashes;
 - schemas use JSON Schema Draft 2020-12 and permit nested evidence objects.
 

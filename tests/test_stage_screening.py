@@ -279,6 +279,35 @@ def test_missing_abstract_routes_to_manual_review_without_model_call(tmp_path) -
     assert provider.calls == []
 
 
+def test_record_filter_runs_only_requested_identifier(tmp_path) -> None:
+    input_path = tmp_path / "records.csv"
+    input_path.write_text(
+        "record_id,title,abstract,year,source\n"
+        'r1,"First","GWAS and eQTL were integrated.",2024,PubMed\n'
+        'r2,"Second","GWAS and pQTL MR were integrated.",2024,PubMed\n',
+        encoding="utf-8",
+    )
+    provider = QueueProvider(
+        {
+            "scope_reviewer": [scope_answer()],
+            "causal_design_reviewer": [causal_title_answer()],
+        }
+    )
+    output = tmp_path / "run"
+    counts = run_stage_screening(
+        input_path,
+        output,
+        provider,
+        record_ids={"r2"},
+    )
+    result = json.loads((output / "screening_results.jsonl").read_text())
+    manifest = json.loads((output / "manifest.json").read_text())
+    assert counts == {"seek_full_text": 1}
+    assert result["record_id"] == "r2"
+    assert manifest["record_ids"] == ["r2"]
+    assert manifest["input_record_count"] == 1
+
+
 def test_thin_abstract_uncertainty_proceeds_to_full_text(tmp_path) -> None:
     input_path = tmp_path / "records.csv"
     input_path.write_text(

@@ -31,6 +31,7 @@ def main() -> None:
         help="run the immutable legacy title/abstract contract with this gate config",
     )
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--record-id", action="append", default=[])
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--temperature", type=float)
     parser.add_argument("--top-p", type=float)
@@ -138,6 +139,7 @@ def main() -> None:
         suite_config_path=args.suite_config,
         limit=args.limit,
         resume=args.resume,
+        record_ids=set(args.record_id),
     )
     print(" ".join(f"{decision}={count}" for decision, count in sorted(counts.items())))
 

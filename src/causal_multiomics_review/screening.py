@@ -222,6 +222,7 @@ def run_stage_screening(
     suite_config_path: str | Path | None = None,
     limit: int | None = None,
     resume: bool = False,
+    record_ids: set[str] | None = None,
 ) -> dict[str, int]:
     config_path = Path(suite_config_path or DEFAULT_SUITE_CONFIG).resolve()
     suite, stage_config = load_stage_config(stage, config_path)
@@ -232,6 +233,16 @@ def run_stage_screening(
         records = read_jsonl_records(input_path)
     else:
         raise ValueError(f"Unsupported input format: {stage_config['input_format']}")
+    if record_ids:
+        records = [
+            record
+            for record in records
+            if _record_matches_filter(record, record_ids)
+        ]
+        found_ids = {record_id(record) for record in records}
+        missing_ids = sorted(record_ids - found_ids)
+        if missing_ids:
+            raise ValueError(f"Requested record IDs not found: {', '.join(missing_ids)}")
     if limit is not None:
         records = records[:limit]
 
@@ -328,12 +339,20 @@ def run_stage_screening(
             "runtime": _provider_runtime(provider),
             "artifacts": _manifest_artifacts(artifacts),
             "resume": resume,
+            "record_ids": sorted(record_ids or []),
             "input_record_count": len(records),
             "processed_now": processed_now,
             "decision_counts": counts,
         },
     )
     return counts
+
+
+def _record_matches_filter(record: dict[str, Any], record_ids: set[str]) -> bool:
+    try:
+        return record_id(record) in record_ids
+    except ValueError:
+        return False
 
 
 def _process_title_abstract_record(

@@ -59,7 +59,7 @@ def main() -> None:
                 errors.append(f"{role}: missing prompt placeholders {sorted(missing)}")
 
     screening_root = PROTOCOL / "screening"
-    suite_path = screening_root / "configs" / "prompt_suite_v0.7.0.json"
+    suite_path = screening_root / "configs" / "prompt_suite_v0.8.0.json"
     suite = load_object(suite_path)
     expected_runtime = {
         "provider_protocol": "codex_cli",
@@ -113,6 +113,8 @@ def main() -> None:
         errors.append("stability policy acceptance thresholds are not exact")
     for stage, raw_stage_config in suite.get("stages", {}).items():
         stage_config = raw_stage_config if isinstance(raw_stage_config, dict) else {}
+        if stage_config.get("gate_precedence") != "exclude_then_unclear":
+            errors.append(f"{stage}: explicit exclusions must precede unclear")
         artifact_configs = dict(stage_config.get("roles", {}))
         artifact_configs["adjudicator"] = stage_config.get("adjudication", {})
         if "section_selector" in stage_config:
