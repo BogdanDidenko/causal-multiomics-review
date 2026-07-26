@@ -1,42 +1,42 @@
 {
   "manifest_version": "1.0.0",
-  "active_suite": "causal_multiomics_screening@0.6.0",
+  "active_suite": "causal_multiomics_screening@0.7.0",
   "suite_config": {
-    "path": "configs/prompt_suite_v0.6.0.json",
-    "sha256": "68bf42ec14c7f861d2101462653fa013deb2641ae6cbf1e021e617a4968e3388"
+    "path": "configs/prompt_suite_v0.7.0.json",
+    "sha256": "b40737f511bd0c4641c036893063bc2dadfd29febd7db640fda6fffe8ca0ca09"
   },
   "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
   "benchmark_version": "candidate_sets_v0.1.0_annotation_pending",
   "created_date": "2026-07-23",
-  "change_note": "Runs GPT 5.6 Terra Medium in an authentication-only temporary Codex home for every reviewer call, excluding global skills, plugins, MCP servers, and user state while preserving frozen prompts, schemas, and the five-run stability gate.",
+  "change_note": "Refines title/abstract design-family and design-role boundaries after the Terra development canary localized instability in mediation, temporal, and randomized-intervention classifications; the isolated pinned runtime and five-run gate are unchanged.",
   "artifacts": [
     {
       "prompt_id": "causal_multiomics.title_abstract.scope_reviewer",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.3.0/scope_reviewer.txt",
-      "prompt_sha256": "205879ef99d9fa8fbb6208a2ccf387fd2df986afe9007150c2e939a343fda927",
-      "schema_path": "schemas/title_abstract/v0.3.0/scope_reviewer.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.4.0/scope_reviewer.txt",
+      "prompt_sha256": "c949115ebbd6b16770cc62db8913732b6470d560fef32b8f40d2e3072924b334",
+      "schema_path": "schemas/title_abstract/v0.4.0/scope_reviewer.schema.json",
       "schema_sha256": "2bad62f8ae68293dc66aab72c5892db8a6ad89ffe24d9d3d34e33dfc54e2d215"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.causal_design_reviewer",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.3.0/causal_design_reviewer.txt",
-      "prompt_sha256": "e9aa66f7703ec397bf9bbc696a9ce43151e54be2307eeff29cd701adabfaf75e",
-      "schema_path": "schemas/title_abstract/v0.3.0/causal_design_reviewer.schema.json",
-      "schema_sha256": "fe89fa3c05da652a36fd68f2a1cb43f243d9cac34045651533228844583620c3"
+      "prompt_path": "prompts/title_abstract/v0.4.0/causal_design_reviewer.txt",
+      "prompt_sha256": "a064f1a8959e14fbd44edf642fc04748988ece565ae72114a6a1439caf6d95ca",
+      "schema_path": "schemas/title_abstract/v0.4.0/causal_design_reviewer.schema.json",
+      "schema_sha256": "32eb4383ce5b2c63258976950c31d80c7820e2c72be033ab202c755bef898972"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.adjudicator",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.3.0/adjudicator.txt",
-      "prompt_sha256": "c34d3cf46f4e29975b19ee7c19c9c78e9655a346d2ab7f0bc227b04df1a87dae",
-      "schema_path": "schemas/title_abstract/v0.3.0/adjudicator.schema.json",
-      "schema_sha256": "f59b4c9514e5e20fa7dc7105d37c602d0d2be8d7eb977b495465a97b3297fb84"
+      "prompt_path": "prompts/title_abstract/v0.4.0/adjudicator.txt",
+      "prompt_sha256": "b6b0bd1d051b9103a6f83b195deaebf677010cb78fcd20e7ea89fed4709e2a15",
+      "schema_path": "schemas/title_abstract/v0.4.0/adjudicator.schema.json",
+      "schema_sha256": "642673562059ab8fc03d98bcc5e4181bc30a9776db5a1dd085adc94b9b153970"
     },
     {
       "prompt_id": "causal_multiomics.full_text.section_selector",

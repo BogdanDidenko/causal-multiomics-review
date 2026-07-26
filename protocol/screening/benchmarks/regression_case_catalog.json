@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "cases": [
     {
       "case_id": "mr_qtl_cross_dataset_multiomics",
@@ -21,9 +21,21 @@
     },
     {
       "case_id": "uncontrolled_mediation",
-      "stage": "full_text",
+      "stage": "both",
       "expected_identification_status": "hypothesis_only",
       "rule": "Pre/post or observational mediation without temporal ordering and mediator-outcome confounding control is Level 2."
+    },
+    {
+      "case_id": "trial_without_explicit_randomization",
+      "stage": "title_abstract",
+      "expected_design_family": "nonrandomized_intervention",
+      "rule": "Trial, placebo, or treatment-arm wording does not establish randomized allocation unless randomization is explicit."
+    },
+    {
+      "case_id": "intervention_followup_not_temporal_design",
+      "stage": "title_abstract",
+      "expected_design_family": "randomized_or_nonrandomized_intervention_only",
+      "rule": "Routine baseline, follow-up, or pre/post measurement does not add temporal_design when intervention assignment supplies the contrast."
     },
     {
       "case_id": "network_only_causality",
