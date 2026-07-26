@@ -1,41 +1,41 @@
 {
   "manifest_version": "1.0.0",
-  "active_suite": "causal_multiomics_screening@0.8.0",
+  "active_suite": "causal_multiomics_screening@0.9.0",
   "suite_config": {
-    "path": "configs/prompt_suite_v0.8.0.json",
-    "sha256": "c336f5380a0309f66ee5f24b661cc7d3651a01b2248bce4eaafa453bc2f78d8d"
+    "path": "configs/prompt_suite_v0.9.0.json",
+    "sha256": "136956693802fd70f92284bef427f2390d5ab87621c2ced44f7ce12fe320819a"
   },
   "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
   "benchmark_version": "candidate_sets_v0.1.1_annotation_pending",
   "created_date": "2026-07-23",
-  "change_note": "Makes explicit EC1-EC6 evidence precede unrelated unclear fields in active Python gates after the development run localized an editorial-versus-thin-multiomics routing instability; prompts and isolated Terra runtime are unchanged.",
+  "change_note": "Adds a deterministic review/editorial boundary: proposed or prior omics evidence is context-only, with multiomics_status=no and integration_mode=external_context_only; explicit-exclusion precedence and the isolated Terra runtime remain active.",
   "artifacts": [
     {
       "prompt_id": "causal_multiomics.title_abstract.scope_reviewer",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.4.0/scope_reviewer.txt",
-      "prompt_sha256": "c949115ebbd6b16770cc62db8913732b6470d560fef32b8f40d2e3072924b334",
-      "schema_path": "schemas/title_abstract/v0.4.0/scope_reviewer.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.5.0/scope_reviewer.txt",
+      "prompt_sha256": "f491770eb8688c31430cdb3f320a8a1d377bd039c96b2b26b8a45f12f0bc22ed",
+      "schema_path": "schemas/title_abstract/v0.5.0/scope_reviewer.schema.json",
       "schema_sha256": "2bad62f8ae68293dc66aab72c5892db8a6ad89ffe24d9d3d34e33dfc54e2d215"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.causal_design_reviewer",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.4.0/causal_design_reviewer.txt",
-      "prompt_sha256": "a064f1a8959e14fbd44edf642fc04748988ece565ae72114a6a1439caf6d95ca",
-      "schema_path": "schemas/title_abstract/v0.4.0/causal_design_reviewer.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.5.0/causal_design_reviewer.txt",
+      "prompt_sha256": "66492830162d1da88063a7d25f8145636366e8d55b79106ebfe4408b23cad4df",
+      "schema_path": "schemas/title_abstract/v0.5.0/causal_design_reviewer.schema.json",
       "schema_sha256": "32eb4383ce5b2c63258976950c31d80c7820e2c72be033ab202c755bef898972"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.adjudicator",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.4.0/adjudicator.txt",
-      "prompt_sha256": "b6b0bd1d051b9103a6f83b195deaebf677010cb78fcd20e7ea89fed4709e2a15",
-      "schema_path": "schemas/title_abstract/v0.4.0/adjudicator.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.5.0/adjudicator.txt",
+      "prompt_sha256": "e5b8f8ba7d0609683cd3592f1d6c6bd682c2aa4ba4e34d89f1b8b9f779353ff6",
+      "schema_path": "schemas/title_abstract/v0.5.0/adjudicator.schema.json",
       "schema_sha256": "642673562059ab8fc03d98bcc5e4181bc30a9776db5a1dd085adc94b9b153970"
     },
     {

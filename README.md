@@ -91,7 +91,7 @@ python scripts/run_screening.py full_text_records.jsonl runs/fulltext-pilot-001 
 ```
 
 The active suite is declared in
-`protocol/screening/configs/prompt_suite_v0.8.0.json`; exact prompt/schema
+`protocol/screening/configs/prompt_suite_v0.9.0.json`; exact prompt/schema
 hashes are in `protocol/screening/prompt_manifest.json`.
 
 The active suite runs every agent with `gpt-5.6-terra` at medium reasoning

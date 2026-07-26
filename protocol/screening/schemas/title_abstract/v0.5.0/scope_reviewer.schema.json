@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "bio_health_scope",
+    "multiomics_status",
+    "integration_mode",
+    "omics_layers",
+    "evidence_spans",
+    "boundary_case",
+    "uncertainty_reason",
+    "concise_rationale"
+  ],
+  "properties": {
+    "report_type": {
+      "enum": ["empirical_primary", "review_editorial", "protocol", "methods_only", "resource", "unclear"]
+    },
+    "bio_health_scope": {"enum": ["yes", "no", "unclear"]},
+    "multiomics_status": {"enum": ["yes", "no", "unclear"]},
+    "integration_mode": {
+      "enum": [
+        "same_study_joint_integration",
+        "same_study_parallel_measurement",
+        "cross_dataset_integrated",
+        "external_context_only",
+        "single_layer_only",
+        "unclear"
+      ]
+    },
+    "omics_layers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/omics_layer"}
+    },
+    "evidence_spans": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/title_abstract_evidence"}
+    },
+    "boundary_case": {
+      "enum": [
+        "clear_scope",
+        "thin_abstract",
+        "report_type_ambiguous",
+        "single_layer_multiple_assays",
+        "omics_plus_non_omics",
+        "external_omics_only",
+        "two_gwas_traits_only",
+        "cross_dataset_multiomics",
+        "other",
+        "none"
+      ]
+    },
+    "uncertainty_reason": {"type": "string"},
+    "concise_rationale": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "omics_layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "raw_term", "use_status", "analytic_role"],
+      "properties": {
+        "layer": {
+          "enum": [
+            "genomics",
+            "epigenomics",
+            "transcriptomics",
+            "proteomics",
+            "metabolomics",
+            "lipidomics",
+            "microbiomics",
+            "other_molecular_omics"
+          ]
+        },
+        "raw_term": {"type": "string", "minLength": 1},
+        "use_status": {"enum": ["measured_in_study", "external_dataset_analyzed", "context_only", "unclear"]},
+        "analytic_role": {"type": "string"}
+      }
+    },
+    "title_abstract_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criterion", "source", "quote"],
+      "properties": {
+        "criterion": {"enum": ["report_type", "bio_health_scope", "multiomics_status", "integration_mode"]},
+        "source": {"enum": ["title", "abstract", "metadata"]},
+        "quote": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
