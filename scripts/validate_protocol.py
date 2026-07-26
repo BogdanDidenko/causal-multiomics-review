@@ -204,6 +204,7 @@ def main() -> None:
     benchmark_counts = {
         "high_signal_development_25.csv": 25,
         "title_abstract_regression_116.csv": 116,
+        "title_abstract_stability_holdout_25.csv": 25,
         "full_text_benchmark_60.csv": 60,
         "section_selector_gold_20.csv": 20,
     }
@@ -220,7 +221,11 @@ def main() -> None:
             "prior_level_3": 22,
             "prior_level_4": 23,
         },
+        "title_abstract_stability_holdout_25.csv": {
+            "sealed_holdout_design_diverse": 25,
+        },
     }
+    benchmark_ids: dict[str, set[str]] = {}
     for filename, expected_count in benchmark_counts.items():
         path = benchmark_dir / filename
         if not path.is_file():
@@ -229,6 +234,9 @@ def main() -> None:
         with path.open(newline="", encoding="utf-8-sig") as handle:
             rows = list(csv.DictReader(handle))
         actual_count = len(rows)
+        benchmark_ids[filename] = {
+            row.get("canonical_id", "") for row in rows if row.get("canonical_id")
+        }
         if actual_count != expected_count:
             errors.append(
                 f"{filename}: expected {expected_count} records, found {actual_count}"
@@ -254,6 +262,19 @@ def main() -> None:
                     f"{filename}: expected strata {expected_strata[filename]}, "
                     f"found {dict(actual_strata)}"
                 )
+
+    holdout_name = "title_abstract_stability_holdout_25.csv"
+    holdout_ids = benchmark_ids.get(holdout_name, set())
+    for other_name in (
+        "high_signal_development_25.csv",
+        "title_abstract_regression_116.csv",
+        "full_text_benchmark_60.csv",
+    ):
+        overlap = holdout_ids & benchmark_ids.get(other_name, set())
+        if overlap:
+            errors.append(
+                f"{holdout_name}: overlaps {other_name} by {len(overlap)} records"
+            )
 
     for path in PROTOCOL.rglob("*"):
         if path.is_file() and path.suffix in {".md", ".txt", ".json"}:

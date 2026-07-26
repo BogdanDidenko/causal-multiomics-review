@@ -231,6 +231,26 @@ def build_regression(rows: list[dict[str, str]], seed: str) -> list[dict[str, st
     return selected
 
 
+def build_stability_holdout(
+    rows: list[dict[str, str]],
+    excluded_ids: set[str],
+    seed: str,
+) -> list[dict[str, str]]:
+    eligible = [
+        row
+        for row in rows
+        if row.get("canonical_id") not in excluded_ids
+        and normalized_text(row.get("title", ""))
+        and normalized_text(row.get("abstract", ""))
+    ]
+    selected = [dict(row) for row in round_robin(eligible, 25, seed)]
+    if len(selected) != 25:
+        raise ValueError(f"Could not build sealed holdout; selected {len(selected)}")
+    for row in selected:
+        row["_sampling_stratum"] = "sealed_holdout_design_diverse"
+    return selected
+
+
 def build_full_text(rows: list[dict[str, str]], seed: str) -> list[dict[str, str]]:
     assessed = [
         row
@@ -306,11 +326,22 @@ def main() -> None:
     regression = build_regression(rows, args.seed)
     full_text = build_full_text(rows, args.seed)
     section_gold = round_robin(full_text, 20, f"{args.seed}-section-gold")
+    excluded_holdout_ids = {
+        row.get("canonical_id")
+        for row in [*high_signal, *regression, *full_text]
+        if row.get("canonical_id")
+    }
+    stability_holdout = build_stability_holdout(
+        rows,
+        excluded_holdout_ids,
+        f"{args.seed}-sealed-stability-v0.1.0",
+    )
 
     high_signal_path = args.output_dir / "high_signal_development_25.csv"
     regression_path = args.output_dir / "title_abstract_regression_116.csv"
     full_text_path = args.output_dir / "full_text_benchmark_60.csv"
     section_gold_path = args.output_dir / "section_selector_gold_20.csv"
+    stability_holdout_path = args.output_dir / "title_abstract_stability_holdout_25.csv"
 
     write_csv(
         high_signal_path,
@@ -332,10 +363,15 @@ def main() -> None:
         FULL_TEXT_FIELDS,
         [full_text_row(row) for row in section_gold],
     )
+    write_csv(
+        stability_holdout_path,
+        TITLE_FIELDS,
+        [title_row(row) for row in stability_holdout],
+    )
     write_manifest(
         args.output_dir / "manifest.json",
         {
-            "benchmark_version": "candidate_sets_v0.1.1",
+            "benchmark_version": "candidate_sets_v0.1.2",
             "status": "annotation_pending",
             "input_file": args.ledger.name,
             "input_sha256": sha256_file(args.ledger),
@@ -346,12 +382,14 @@ def main() -> None:
                 "title_abstract_regression": len(regression),
                 "full_text_benchmark": len(full_text),
                 "section_selector_gold": len(section_gold),
+                "title_abstract_stability_holdout": len(stability_holdout),
             },
             "output_sha256": {
                 high_signal_path.name: sha256_file(high_signal_path),
                 regression_path.name: sha256_file(regression_path),
                 full_text_path.name: sha256_file(full_text_path),
                 section_gold_path.name: sha256_file(section_gold_path),
+                stability_holdout_path.name: sha256_file(stability_holdout_path),
             },
             "ground_truth_policy": (
                 "Existing decisions are sampling hints only; expert fields require "

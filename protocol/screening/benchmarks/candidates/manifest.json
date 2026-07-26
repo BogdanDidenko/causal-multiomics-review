@@ -1,12 +1,13 @@
 {
-  "benchmark_version": "candidate_sets_v0.1.1",
+  "benchmark_version": "candidate_sets_v0.1.2",
   "counts": {
     "full_text_benchmark": 60,
     "high_signal_development": 25,
     "section_selector_gold": 20,
-    "title_abstract_regression": 116
+    "title_abstract_regression": 116,
+    "title_abstract_stability_holdout": 25
   },
-  "created_at": "2026-07-26T02:10:45.649345+00:00",
+  "created_at": "2026-07-26T12:52:56.214236+00:00",
   "development_set_eligibility": "nonempty_title_and_abstract",
   "ground_truth_policy": "Existing decisions are sampling hints only; expert fields require fresh annotation.",
   "input_file": "screening_ledger.csv",
@@ -15,7 +16,8 @@
     "full_text_benchmark_60.csv": "418a9079acac5cbf8a83889391a7a409dea5ff31ffdf008224cce65fe7f0f493",
     "high_signal_development_25.csv": "312e5bf71c84c0b862e8896293b52fa60638f194371ec8e206ecfe838ca680c1",
     "section_selector_gold_20.csv": "9b217b0202ef17f4d4e3b8d40eac075cc56fa500f73b3fd3ae44b77660d7dd67",
-    "title_abstract_regression_116.csv": "1c09590cf76e8a628bcec126f324485fa6c43fa7ae4888cb6298406148582e13"
+    "title_abstract_regression_116.csv": "1c09590cf76e8a628bcec126f324485fa6c43fa7ae4888cb6298406148582e13",
+    "title_abstract_stability_holdout_25.csv": "ce97ec41681bc9efa2833eaa7942700bd374bdc3070a1b22e924ac9f0e41e947"
   },
   "seed": "causal-multiomics-benchmark-v0.1.0",
   "status": "annotation_pending"

@@ -7,7 +7,7 @@
   },
   "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
-  "benchmark_version": "candidate_sets_v0.1.1_annotation_pending",
+  "benchmark_version": "candidate_sets_v0.1.2_annotation_pending",
   "created_date": "2026-07-23",
   "change_note": "Calibrates seven development-set boundary patterns with general lexical and design precedence for corrections, highlights and policy commentary, explicit randomized trials, title-supported MR, TWAS/SMR cross-dataset integration, treatment versus molecular perturbation, and contextual prior studies.",
   "artifacts": [

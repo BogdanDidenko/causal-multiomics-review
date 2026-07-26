@@ -12,6 +12,10 @@ only as sampling provenance. They are not ground truth.
   performance on this set.
 - `title_abstract_regression_116.csv`: 42 candidate Levels 2-4, 42 candidate
   exclusions, and 32 boundary/unclear records.
+- `title_abstract_stability_holdout_25.csv`: sealed, design-diverse stability
+  test set selected without prior-label quotas. It is disjoint from
+  development-25, regression-116, and full-text-60 and must be evaluated only
+  after a prompt suite is frozen.
 - `full_text_benchmark_60.csv`: all available prior Levels 0-2 plus balanced
   samples of Levels 3-4 and rare design families.
 - `section_selector_gold_20.csv`: subset for expert section-ID annotation.
@@ -51,6 +55,10 @@ The prompt manifest remains `draft_pending_stability_and_benchmark` until these
 gates and the stability gate pass.
 Prompt changes after looking at regression outcomes require a new prompt
 version and a fresh held-out benchmark.
+
+Do not inspect holdout record-level outputs during prompt iteration. A failed
+sealed holdout invalidates the candidate suite for promotion; create a newly
+sealed holdout before any subsequent promotion attempt.
 
 Run `scripts/evaluate_prompt_benchmark.py` after annotation and screening. Its
 `acceptance` object reports each threshold and an overall `pass`, `fail`, or
