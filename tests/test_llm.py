@@ -70,8 +70,9 @@ def test_codex_cli_provider_fixes_terra_medium_and_enforces_schema(monkeypatch) 
     assert command[command.index("--config") + 1] == 'model_reasoning_effort="medium"'
     context_config = command.index("--config", command.index("--config") + 1)
     assert command[context_config + 1] == "model_context_window=32768"
+    approval_config = command.index("--config", context_config + 1)
+    assert command[approval_config + 1] == 'approval_policy="never"'
     assert command[command.index("--sandbox") + 1] == "read-only"
-    assert command[command.index("--ask-for-approval") + 1] == "never"
     assert "--ephemeral" in command
     assert "--ignore-user-config" in command
     assert "--ignore-rules" in command
