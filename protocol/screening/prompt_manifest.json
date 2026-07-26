@@ -1,41 +1,41 @@
 {
   "manifest_version": "1.0.0",
-  "active_suite": "causal_multiomics_screening@0.10.0",
+  "active_suite": "causal_multiomics_screening@0.11.0",
   "suite_config": {
-    "path": "configs/prompt_suite_v0.10.0.json",
-    "sha256": "1a9f47e35d085bd9f65026599b8666c4db4f1f496189ed6d44fe5df232a62c7b"
+    "path": "configs/prompt_suite_v0.11.0.json",
+    "sha256": "ac782e5ae77dcee792c97779373dbfb69a4ff2d535975c64ef0beb0759280cd2"
   },
   "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
   "benchmark_version": "candidate_sets_v0.1.1_annotation_pending",
   "created_date": "2026-07-23",
-  "change_note": "Adds deterministic methods-only synthetic-benchmark and review-of-prior-design boundaries for biological scope, contextual omics, causal claims, identification status, and design role; explicit-exclusion precedence and isolated Terra runtime remain active.",
+  "change_note": "Calibrates seven development-set boundary patterns with general lexical and design precedence for corrections, highlights and policy commentary, explicit randomized trials, title-supported MR, TWAS/SMR cross-dataset integration, treatment versus molecular perturbation, and contextual prior studies.",
   "artifacts": [
     {
       "prompt_id": "causal_multiomics.title_abstract.scope_reviewer",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.6.0/scope_reviewer.txt",
-      "prompt_sha256": "277bd19f5f7120bbc8b91e301d5be1c7beaf8076db38b60f31337e7a30dd58ca",
-      "schema_path": "schemas/title_abstract/v0.6.0/scope_reviewer.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.7.0/scope_reviewer.txt",
+      "prompt_sha256": "2b71b8c2f7d42fed5393cdf0c5442e9b320330fa77b432deeb7896de4b7cf356",
+      "schema_path": "schemas/title_abstract/v0.7.0/scope_reviewer.schema.json",
       "schema_sha256": "2bad62f8ae68293dc66aab72c5892db8a6ad89ffe24d9d3d34e33dfc54e2d215"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.causal_design_reviewer",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.6.0/causal_design_reviewer.txt",
-      "prompt_sha256": "e2d3630355ba13ea28db607bc06ee47a230ddf5649f16715130a80273a77c92a",
-      "schema_path": "schemas/title_abstract/v0.6.0/causal_design_reviewer.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.7.0/causal_design_reviewer.txt",
+      "prompt_sha256": "b65777b2ba82314b0126f53d28c37a67bfd1ae1f622c215f0de7b0ab6cb91d22",
+      "schema_path": "schemas/title_abstract/v0.7.0/causal_design_reviewer.schema.json",
       "schema_sha256": "32eb4383ce5b2c63258976950c31d80c7820e2c72be033ab202c755bef898972"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.adjudicator",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.6.0/adjudicator.txt",
-      "prompt_sha256": "4edd503620e80ea2801860e65d732b80266ef72c0ee437d258764da1420eebdc",
-      "schema_path": "schemas/title_abstract/v0.6.0/adjudicator.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.7.0/adjudicator.txt",
+      "prompt_sha256": "136768daf89135501c29bfb82aa8eeeea333c95c20b8b2e74f347b0e75200478",
+      "schema_path": "schemas/title_abstract/v0.7.0/adjudicator.schema.json",
       "schema_sha256": "642673562059ab8fc03d98bcc5e4181bc30a9776db5a1dd085adc94b9b153970"
     },
     {
