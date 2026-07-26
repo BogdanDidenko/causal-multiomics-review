@@ -7,7 +7,7 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PROTOCOL_ROOT = REPO_ROOT / "protocol"
 SCREENING_ROOT = PROTOCOL_ROOT / "screening"
-DEFAULT_SUITE_CONFIG = SCREENING_ROOT / "configs" / "prompt_suite_v0.13.0.json"
+DEFAULT_SUITE_CONFIG = SCREENING_ROOT / "configs" / "prompt_suite_v0.15.0.json"
 
 
 def load_json(path: str | Path) -> dict[str, Any]:

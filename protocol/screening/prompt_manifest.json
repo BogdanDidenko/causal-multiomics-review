@@ -1,41 +1,41 @@
 {
   "manifest_version": "1.0.0",
-  "active_suite": "causal_multiomics_screening@0.13.0",
+  "active_suite": "causal_multiomics_screening@0.15.0",
   "suite_config": {
-    "path": "configs/prompt_suite_v0.13.0.json",
-    "sha256": "7ed609c500c90151d003c850d237223ceb0f1776f3b90ce94785c35e9aa5368b"
+    "path": "configs/prompt_suite_v0.15.0.json",
+    "sha256": "9743867104b68ad3163c800d9d8d45c870ce503410deb85f54d8c345ce8cb3c8"
   },
   "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
   "benchmark_version": "candidate_sets_v0.1.2_annotation_pending",
   "created_date": "2026-07-23",
-  "change_note": "Adds mutually exclusive integration-mode provenance rules, a report-level causal-design applicability gate, an exhaustive applied-family checklist, and a narrow explicit TWAS/SMR/MR layer rule. Calibration uses development records only; the sealed stability holdout remains uninspected.",
+  "change_note": "Defines title/abstract design_families as current-report applied designs only, separating decisive eligibility criteria from contextual or proposed method mentions. The sealed stability holdout remains uninspected.",
   "artifacts": [
     {
       "prompt_id": "causal_multiomics.title_abstract.scope_reviewer",
-      "version": "0.9.0",
+      "version": "0.11.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.9.0/scope_reviewer.txt",
-      "prompt_sha256": "b17be95a8f002a09b4dc1ce4c2ca991c220ae5c31669723a86048648d274ba73",
-      "schema_path": "schemas/title_abstract/v0.9.0/scope_reviewer.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.11.0/scope_reviewer.txt",
+      "prompt_sha256": "d13703b60a5615d90c0f7c2cb6f70165c772133bf5d04a7123134038bd2eca46",
+      "schema_path": "schemas/title_abstract/v0.11.0/scope_reviewer.schema.json",
       "schema_sha256": "2bad62f8ae68293dc66aab72c5892db8a6ad89ffe24d9d3d34e33dfc54e2d215"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.causal_design_reviewer",
-      "version": "0.9.0",
+      "version": "0.11.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.9.0/causal_design_reviewer.txt",
-      "prompt_sha256": "dad57d23fc6b4b7b484ffdc1d2c0a84192947d8d74373cc5a7a97eb334b22e3c",
-      "schema_path": "schemas/title_abstract/v0.9.0/causal_design_reviewer.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.11.0/causal_design_reviewer.txt",
+      "prompt_sha256": "5425bec1c0c8caa8a50faeca9a2aa42eecb4c69576913648efb48d851dd9282c",
+      "schema_path": "schemas/title_abstract/v0.11.0/causal_design_reviewer.schema.json",
       "schema_sha256": "32eb4383ce5b2c63258976950c31d80c7820e2c72be033ab202c755bef898972"
     },
     {
       "prompt_id": "causal_multiomics.title_abstract.adjudicator",
-      "version": "0.9.0",
+      "version": "0.11.0",
       "stage": "title_abstract",
-      "prompt_path": "prompts/title_abstract/v0.9.0/adjudicator.txt",
-      "prompt_sha256": "8a99a44818ad2412b9afec641ca1fb35f488d5af1824a1e61249b0b47d85f9e6",
-      "schema_path": "schemas/title_abstract/v0.9.0/adjudicator.schema.json",
+      "prompt_path": "prompts/title_abstract/v0.11.0/adjudicator.txt",
+      "prompt_sha256": "a310a50616d5c5864ef7867ed57123492ce07e682f0abe5ade8ff802ca074abe",
+      "schema_path": "schemas/title_abstract/v0.11.0/adjudicator.schema.json",
       "schema_sha256": "642673562059ab8fc03d98bcc5e4181bc30a9776db5a1dd085adc94b9b153970"
     },
     {
