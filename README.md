@@ -91,10 +91,10 @@ python scripts/run_screening.py full_text_records.jsonl runs/fulltext-pilot-001 
 ```
 
 The active suite is declared in
-`protocol/screening/configs/prompt_suite_v0.4.0.json`; exact prompt/schema
+`protocol/screening/configs/prompt_suite_v0.5.0.json`; exact prompt/schema
 hashes are in `protocol/screening/prompt_manifest.json`.
 
-The active suite runs every agent with `gpt-5.6-luna` at medium reasoning
+The active suite runs every agent with `gpt-5.6-terra` at medium reasoning
 effort. Establish stability before deployment with five independent repeats:
 
 ```bash

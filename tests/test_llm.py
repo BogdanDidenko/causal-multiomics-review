@@ -44,7 +44,7 @@ def test_responses_output_text_supports_explicit_and_nested_shapes() -> None:
     ) == '{"ok": true}'
 
 
-def test_codex_cli_provider_fixes_luna_medium_and_enforces_schema(monkeypatch) -> None:
+def test_codex_cli_provider_fixes_terra_medium_and_enforces_schema(monkeypatch) -> None:
     captured: dict[str, object] = {}
 
     def fake_run(command, **kwargs):
@@ -57,7 +57,7 @@ def test_codex_cli_provider_fixes_luna_medium_and_enforces_schema(monkeypatch) -
         return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
 
     monkeypatch.setattr("causal_multiomics_review.llm.subprocess.run", fake_run)
-    provider = CodexCliProvider("gpt-5.6-luna", timeout=123, max_tokens=4000)
+    provider = CodexCliProvider("gpt-5.6-terra", timeout=123, max_tokens=4000)
     answer, raw = provider.complete_json(
         "Return the screening decision.",
         {"type": "object", "properties": {"decision": {"type": "string"}}},
@@ -66,7 +66,7 @@ def test_codex_cli_provider_fixes_luna_medium_and_enforces_schema(monkeypatch) -
 
     command = captured["command"]
     assert command[:3] == ["codex", "exec", "-"]
-    assert command[command.index("--model") + 1] == "gpt-5.6-luna"
+    assert command[command.index("--model") + 1] == "gpt-5.6-terra"
     assert command[command.index("--config") + 1] == 'model_reasoning_effort="medium"'
     context_config = command.index("--config", command.index("--config") + 1)
     assert command[context_config + 1] == "model_context_window=32768"

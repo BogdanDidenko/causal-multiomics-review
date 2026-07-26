@@ -48,7 +48,7 @@ def test_stability_localizes_disagreeing_criterion() -> None:
     assert summary["acceptance"]["overall"] == "fail"
 
 
-def test_stability_cli_requires_matching_luna_manifests(tmp_path) -> None:
+def test_stability_cli_requires_matching_terra_manifests(tmp_path) -> None:
     run_args: list[str] = []
     for index in range(1, 6):
         run_dir = tmp_path / f"replicate-{index:02d}"
@@ -58,7 +58,7 @@ def test_stability_cli_requires_matching_luna_manifests(tmp_path) -> None:
         (run_dir / "manifest.json").write_text(
             json.dumps(
                 {
-                    "model": "gpt-5.6-luna",
+                    "model": "gpt-5.6-terra",
                     "runtime": {
                         "api_protocol": "codex_cli",
                         "reasoning_effort": "medium",
@@ -106,7 +106,7 @@ def test_stability_cli_rejects_reasoning_effort_drift(tmp_path) -> None:
         (run_dir / "manifest.json").write_text(
             json.dumps(
                 {
-                    "model": "gpt-5.6-luna",
+                    "model": "gpt-5.6-terra",
                     "runtime": {
                         "api_protocol": "codex_cli",
                         "reasoning_effort": reasoning_effort,

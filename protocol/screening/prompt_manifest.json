@@ -1,15 +1,15 @@
 {
   "manifest_version": "1.0.0",
-  "active_suite": "causal_multiomics_screening@0.4.0",
+  "active_suite": "causal_multiomics_screening@0.5.0",
   "suite_config": {
-    "path": "configs/prompt_suite_v0.4.0.json",
-    "sha256": "249d9411a638c024d5c4d85e6d6486d6c6ac6edb15515f7238b26b9e2d915aa8"
+    "path": "configs/prompt_suite_v0.5.0.json",
+    "sha256": "dcf239fc602cd71ec0cd2f93bd30db69f2b8bd9160e29d34a0f6f541046f47d5"
   },
   "approval_status": "draft_pending_stability_and_benchmark",
   "approval_date": null,
   "benchmark_version": "candidate_sets_v0.1.0_annotation_pending",
   "created_date": "2026-07-23",
-  "change_note": "Promotes a single-model GPT 5.6 Luna Medium suite through isolated Codex CLI calls with a mandatory five-run stability gate; prior versioned artifacts remain immutable.",
+  "change_note": "Promotes GPT 5.6 Terra Medium for every isolated Codex CLI reviewer call while preserving the frozen prompts, schemas, and mandatory five-run stability gate; prior versioned suites remain immutable.",
   "artifacts": [
     {
       "prompt_id": "causal_multiomics.title_abstract.scope_reviewer",

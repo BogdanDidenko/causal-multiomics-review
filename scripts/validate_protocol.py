@@ -59,7 +59,7 @@ def main() -> None:
                 errors.append(f"{role}: missing prompt placeholders {sorted(missing)}")
 
     screening_root = PROTOCOL / "screening"
-    suite_path = screening_root / "configs" / "prompt_suite_v0.4.0.json"
+    suite_path = screening_root / "configs" / "prompt_suite_v0.5.0.json"
     suite = load_object(suite_path)
     expected_runtime = {
         "provider_protocol": "codex_cli",
@@ -73,8 +73,8 @@ def main() -> None:
             errors.append(f"suite runtime {field} must be {expected}")
     expected_provider = {
         "protocol": "codex_cli",
-        "model": "gpt-5.6-luna",
-        "display_name": "GPT 5.6 Luna Medium",
+        "model": "gpt-5.6-terra",
+        "display_name": "GPT 5.6 Terra Medium",
         "sandbox": "read-only",
         "approval_policy": "never",
         "ephemeral": True,
@@ -85,8 +85,8 @@ def main() -> None:
         if suite.get("provider", {}).get(field) != expected:
             errors.append(f"suite provider {field} must be {expected}")
     stability_policy = suite.get("stability_policy", {})
-    if stability_policy.get("model") != "gpt-5.6-luna":
-        errors.append("stability policy must use gpt-5.6-luna")
+    if stability_policy.get("model") != "gpt-5.6-terra":
+        errors.append("stability policy must use gpt-5.6-terra")
     if stability_policy.get("repeats") != 5:
         errors.append("stability policy must require five runs")
     expected_agents = [

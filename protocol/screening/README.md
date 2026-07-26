@@ -3,11 +3,11 @@
 The unversioned prompt files and `gate_config.json` are the immutable legacy
 `v0.1.0` title/abstract contract. They remain available for reproduction.
 
-The active suite is `configs/prompt_suite_v0.4.0.json`:
+The active suite is `configs/prompt_suite_v0.5.0.json`:
 
 - title/abstract prompts are version `0.3.0`;
 - full-text prompts are version `0.2.0`;
-- every active agent uses isolated `codex exec` calls with `gpt-5.6-luna` and
+- every active agent uses isolated `codex exec` calls with `gpt-5.6-terra` and
   medium reasoning effort; the runs are ephemeral, read-only, and ignore local
   Codex configuration and project rules;
 - `prompt_manifest.json` records exact prompt, schema, and config hashes;

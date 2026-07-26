@@ -56,7 +56,7 @@ Run `scripts/evaluate_prompt_benchmark.py` after annotation and screening. Its
 
 ## Stability Gate
 
-All seven agent roles use `gpt-5.6-luna` with medium reasoning effort. Run the
+All seven agent roles use `gpt-5.6-terra` with medium reasoning effort. Run the
 same frozen input five times with `scripts/run_stability.py`. Acceptance is
 100% schema success, exact agreement for final decision, decisive criteria, and
 full-text evidence level, plus a zero manual-review rate. The evaluator ignores
